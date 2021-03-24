@@ -1,0 +1,11 @@
+.App {
+  margin: 0 auto;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: 1fr 10fr;
+  grid-template-rows: 50px 1fr 50px;
+  grid-template-areas:
+    "header header"
+    "navbar body"
+    "footer footer";
+}

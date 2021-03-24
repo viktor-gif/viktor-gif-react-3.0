@@ -1,0 +1,7 @@
+.profile {
+  grid-area: body;
+  background-color: whitesmoke;
+}
+.profileWrapper {
+  margin: 15px;
+}

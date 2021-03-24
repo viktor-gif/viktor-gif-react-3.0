@@ -1,0 +1,7 @@
+.post {
+  margin-top: 20px;
+}
+.postImg img {
+  width: 100px;
+  border-radius: 10px;
+}
