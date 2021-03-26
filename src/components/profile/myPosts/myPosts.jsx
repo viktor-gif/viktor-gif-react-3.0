@@ -3,15 +3,10 @@ import s from "./myPosts.module.css";
 import Post from "./post/post";
 
 const MyPosts = (props) => {
-  return (
-    <div className={s.myPosts}>
-      <Post post="hello!!!" />
-      <Post post="I'm a cool developer" />
-      <Post post="Hello world!!!!" />
-      <Post post="Something" />
-      <Post post="Something else" />
-    </div>
-  );
+  const postsElements = props.posts.map((p) => (
+    <Post key={p.id} id={p.id} post={p.post} likesCount={p.likesCount} />
+  ));
+  return <div className={s.myPosts}>{postsElements}</div>;
 };
 
 export default MyPosts;

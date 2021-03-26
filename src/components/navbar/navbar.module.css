@@ -1,4 +1,16 @@
 .navbar {
   grid-area: navbar;
   background-color: thistle;
+  padding: 10px;
+}
+.item {
+  padding-bottom: 10px;
+}
+.item a {
+  color: white;
+  text-decoration: none;
+  font-size: 20px;
+}
+.item a.active {
+  color: gold;
 }
