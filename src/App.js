@@ -2,9 +2,9 @@ import "./App.css";
 import Header from "./components/header/header";
 import Navbar from "./components/navbar/navbar";
 import Profile from "./components/profile/profile";
-import Dialogs from "./components/dialogs/dialogs";
 import Footer from "./components/footer/footer";
 import { BrowserRouter, Route } from "react-router-dom";
+import DialogsContainer from "./components/dialogs/dialogsContainer";
 
 function App(props) {
   return (
@@ -18,14 +18,18 @@ function App(props) {
             render={() => (
               <Profile
                 profilePage={props.state.profilePage}
-                addPost={props.addPost}
-                changePost={props.changePost}
+                dispatch={props.dispatch}
               />
             )}
           />
           <Route
             path="/dialogs"
-            render={() => <Dialogs dialogsPage={props.state.dialogsPage} />}
+            render={() => (
+              <DialogsContainer
+                dialogsPage={props.state.dialogsPage}
+                dispatch={props.dispatch}
+              />
+            )}
           />
         </div>
 

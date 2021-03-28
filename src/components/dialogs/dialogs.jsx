@@ -1,4 +1,5 @@
 import React from "react";
+import { addMessage, updateMessageText } from "../../redux/dialogs-reducer";
 import Dialog from "./dialog/dialog";
 import s from "./dialogs.module.css";
 import Message from "./message/message";
@@ -12,10 +13,33 @@ const Dialogs = (props) => {
     <Message key={m.id} id={m.id} message={m.message} />
   ));
 
+  let messageText = props.dialogsPage.messageText;
+
+  const onChangeMessageText = (e) => {
+    props.updateMessageText(e.target.value);
+  };
+
+  const onSendMessage = () => {
+    props.addMessage(messageText);
+  };
+
   return (
-    <div className={s.dialogs}>
-      <div className={s.contacts}>{dialogsElements}</div>
-      <div classname={s.messages}>{messagesElements}</div>
+    <div>
+      <div className={s.dialogs}>
+        <div className={s.contacts}>{dialogsElements}</div>
+        <div className={s.messages}>{messagesElements}</div>
+      </div>
+      <div className={s.formMessage}>
+        <div>
+          <textarea
+            value={messageText}
+            onChange={onChangeMessageText}
+          ></textarea>
+        </div>
+        <div>
+          <button onClick={onSendMessage}>Send message</button>
+        </div>
+      </div>
     </div>
   );
 };
