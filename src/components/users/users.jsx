@@ -10,11 +10,25 @@ class Users extends React.Component {
 
   componentDidMount() {
     axios
-      .get("https://social-network.samuraijs.com/api/1.0/users")
+      .get(
+        `https://social-network.samuraijs.com/api/1.0/users?page=${this.props.selectedPage}&count=${this.props.pageSize}`
+      )
+      .then((response) => {
+        this.props.getUsers(response.data.items);
+        this.props.getTotalUsersCount(response.data.totalCount);
+      });
+  }
+
+  getCurrentPage = (currentPage) => {
+    this.props.getCurrentPage(currentPage);
+    axios
+      .get(
+        `https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${this.props.pageSize}`
+      )
       .then((response) => {
         this.props.getUsers(response.data.items);
       });
-  }
+  };
 
   render() {
     const usersItems = this.props.users.map((u) => {
@@ -43,7 +57,32 @@ class Users extends React.Component {
         </div>
       );
     });
-    return <div>{usersItems}</div>;
+
+    const pagesCount = Math.ceil(
+      this.props.totalUsersCount / this.props.pageSize
+    );
+    let pagesArr = [];
+    for (let i = 1; i <= pagesCount; i++) {
+      pagesArr.push(i);
+    }
+    const pages = pagesArr.map((p) => {
+      return (
+        <span
+          onClick={() => this.getCurrentPage(p)}
+          className={this.props.selectedPage === p ? s.selectedPage : ""}
+          key={p}
+        >
+          {p}
+        </span>
+      );
+    });
+
+    return (
+      <div>
+        <div className={s.pages}>{pages}</div>
+        {usersItems}
+      </div>
+    );
   }
 }
 
