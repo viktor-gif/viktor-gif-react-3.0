@@ -1,90 +1,57 @@
-import axios from "axios";
 import React from "react";
 import s from "./users.module.css";
 import userAvatar from "../../img/ava.png";
 
-class Users extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  componentDidMount() {
-    axios
-      .get(
-        `https://social-network.samuraijs.com/api/1.0/users?page=${this.props.selectedPage}&count=${this.props.pageSize}`
-      )
-      .then((response) => {
-        this.props.getUsers(response.data.items);
-        this.props.getTotalUsersCount(response.data.totalCount);
-      });
-  }
-
-  getCurrentPage = (currentPage) => {
-    this.props.getCurrentPage(currentPage);
-    axios
-      .get(
-        `https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${this.props.pageSize}`
-      )
-      .then((response) => {
-        this.props.getUsers(response.data.items);
-      });
-  };
-
-  render() {
-    const usersItems = this.props.users.map((u) => {
-      return (
-        <div key={u.id} className={s.user}>
-          <div className={s.userPhoto}>
-            <img src={u.photos.small ?? userAvatar} alt="photo" />
-          </div>
-          <div>
-            {u.followed ? (
-              <button onClick={() => this.props.unfollow(u.id)}>
-                Unfollow
-              </button>
-            ) : (
-              <button onClick={() => this.props.follow(u.id)}>Follow</button>
-            )}
-          </div>
-          <div>
-            <b>Name</b> :{u.name}
-          </div>
-          <div>
-            <b>Status</b> :{u.status ?? "--------"}
-          </div>
-          <div>u.country</div>
-          <div>u.city</div>
-        </div>
-      );
-    });
-
-    const pagesCount = Math.ceil(
-      this.props.totalUsersCount / this.props.pageSize
-    );
-    let pagesArr = [];
-    for (let i = 1; i <= pagesCount; i++) {
-      pagesArr.push(i);
-    }
-    const pages = pagesArr.map((p) => {
-      return (
-        <span
-          onClick={() => this.getCurrentPage(p)}
-          className={this.props.selectedPage === p ? s.selectedPage : ""}
-          key={p}
-        >
-          {p}
-        </span>
-      );
-    });
-
+const Users = (props) => {
+  const usersItems = props.users.map((u) => {
     return (
-      <div>
-        <div className={s.pages}>{pages}</div>
-        {usersItems}
+      <div key={u.id} className={s.user}>
+        <div className={s.userPhoto}>
+          <img src={u.photos.small ?? userAvatar} alt="photo" />
+        </div>
+        <div>
+          {u.followed ? (
+            <button onClick={() => props.unfollow(u.id)}>Unfollow</button>
+          ) : (
+            <button onClick={() => props.follow(u.id)}>Follow</button>
+          )}
+        </div>
+        <div>
+          <b>Name</b> :{u.name}
+        </div>
+        <div>
+          <b>Status</b> :{u.status ?? "--------"}
+        </div>
+        <div>u.country</div>
+        <div>u.city</div>
       </div>
     );
+  });
+
+  const pagesCount = Math.ceil(props.totalUsersCount / props.pageSize);
+  let pagesArr = [];
+  for (let i = 1; i <= pagesCount; i++) {
+    pagesArr.push(i);
   }
-}
+  const pages = pagesArr.map((p) => {
+    return (
+      <span
+        onClick={() => props.setCurrentPage(p)}
+        className={props.selectedPage === p ? s.selectedPage : ""}
+        key={p}
+      >
+        {p}
+      </span>
+    );
+  });
+
+  return (
+    <div>
+      <div className={s.pages}>{pages}</div>
+      {usersItems}
+    </div>
+  );
+};
 
 // const User = (props) => {
 //   const follow = () => {
