@@ -1,13 +1,12 @@
 import React from "react";
-import { addPost, updatePostText } from "../../redux/profile-reducer";
 import MyPostsContainer from "./myPosts/myPostsContainer";
 import s from "./profile.module.css";
-import ProfileInfo from "./profileInfo/profileInfo";
+import ProfileInfoContainer from "./profileInfo/profileInfoContainer";
 
 const Profile = (props) => {
   return (
     <div className={s.profile}>
-      <ProfileInfo />
+      <ProfileInfoContainer />
 
       <MyPostsContainer />
     </div>

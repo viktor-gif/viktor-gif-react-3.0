@@ -1,5 +1,5 @@
 import "./App.css";
-import Header from "./components/header/header";
+import HeaderContainer from "./components/header/HeaderContainer";
 import Navbar from "./components/navbar/navbar";
 import Profile from "./components/profile/profile";
 import Footer from "./components/footer/footer";
@@ -11,10 +11,10 @@ function App(props) {
   return (
     <BrowserRouter>
       <div className="App">
-        <Header />
+        <HeaderContainer />
         <Navbar />
         <div className="content-wrapper">
-          <Route path="/profile" render={() => <Profile />} />
+          <Route path="/profile/:userId?" render={() => <Profile />} />
           <Route path="/dialogs" render={() => <DialogsContainer />} />
           <Route path="/users" render={() => <UsersContainer />} />
         </div>
