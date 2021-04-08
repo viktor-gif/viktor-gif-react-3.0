@@ -15,44 +15,19 @@ import { usersAPI } from "../../api/api";
 
 class UsersContainer extends React.Component {
   componentDidMount() {
-    this.props.setToggleFetching(true);
-
-    usersAPI
-      .getUsers(this.props.selectedPage, this.props.pageSize)
-      .then((response) => {
-        this.props.setToggleFetching(false);
-
-        this.props.getUsers(response.data.items);
-        this.props.setTotalUsersCount(response.data.totalCount);
-      });
+    this.props.getUsers(this.props.selectedPage, this.props.pageSize);
   }
 
   setCurrentPage = (currentPage) => {
     this.props.setCurrentPage(currentPage);
-    this.props.setToggleFetching(true);
-    usersAPI.getUsers(currentPage, this.props.pageSize).then((response) => {
-      this.props.setToggleFetching(false);
-      this.props.getUsers(response.data.items);
-    });
+    this.props.getUsers(currentPage, this.props.pageSize);
   };
 
   follow = (userId) => {
-    this.props.toggleFollowingProgress([userId]);
-    usersAPI.follow(userId).then((response) => {
-      if (response.data.resultCode === 0) {
-        this.props.follow(userId);
-      }
-      this.props.toggleFollowingProgress([false]);
-    });
+    this.props.follow(userId);
   };
   unfollow = (userId) => {
-    this.props.toggleFollowingProgress([userId]);
-    usersAPI.unfollow(userId).then((response) => {
-      if (response.data.resultCode === 0) {
-        this.props.unfollow(userId);
-      }
-      this.props.toggleFollowingProgress([false]);
-    });
+    this.props.unfollow(userId);
   };
 
   render() {

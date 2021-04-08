@@ -1,3 +1,5 @@
+import { profileAPI } from "../api/api";
+
 const ADD_POST = "ADD_POST";
 const UPDATE_POST_TEXT = "UPDATE_POST_TEXT";
 const SET_PROFILE = "SET_PROFILE";
@@ -47,5 +49,12 @@ export const updatePostText = (newText) => ({
   newText,
 });
 export const setProfile = (profileInfo) => ({ type: SET_PROFILE, profileInfo });
+
+//redux-thunk
+export const getProfile = () => (dispatch) => {
+  profileAPI.setProfile().then((response) => {
+    dispatch(setProfile(response.data));
+  });
+};
 
 export default profileReducer;
