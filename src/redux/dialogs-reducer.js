@@ -1,5 +1,4 @@
 const ADD_MESSAGE = "ADD_MESSAGE";
-const UPDATE_MESSAGE_TEXT = "UPDATE_MESSAGE_TEXT";
 
 const initialState = {
   dialogs: [
@@ -12,7 +11,6 @@ const initialState = {
     { id: 2, message: "Okey, and you?" },
     { id: 3, message: "I'm ok, let's go to walk!" },
   ],
-  messageText: "",
 };
 
 const dialogsReducer = (state = initialState, action) => {
@@ -28,21 +26,11 @@ const dialogsReducer = (state = initialState, action) => {
         messageText: "",
       };
 
-    case UPDATE_MESSAGE_TEXT:
-      return {
-        ...state,
-        messageText: action.newMessageText,
-      };
-
     default:
       return state;
   }
 };
 
 export const addMessage = (message) => ({ type: ADD_MESSAGE, message });
-export const updateMessageText = (newMessageText) => ({
-  type: UPDATE_MESSAGE_TEXT,
-  newMessageText,
-});
 
 export default dialogsReducer;

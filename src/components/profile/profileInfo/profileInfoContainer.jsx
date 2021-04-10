@@ -7,7 +7,7 @@ import {
   getStatus,
   updateStatus,
 } from "../../../redux/profile-reducer";
-import withAuthRedirect from "../../common/withAuthRedirect/withAuthRedirect";
+// import withAuthRedirect from "../../common/withAuthRedirect/withAuthRedirect";
 import { compose } from "redux";
 
 class ProfileInfoContainer extends React.Component {

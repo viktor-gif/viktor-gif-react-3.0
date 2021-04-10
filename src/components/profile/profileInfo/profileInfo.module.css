@@ -1,0 +1,10 @@
+.contacts {
+  margin-top: 20px;
+}
+.contactsNames {
+  font-weight: bold;
+}
+.contactsSpan {
+  font-weight: bold;
+  font-size: 20px;
+}
