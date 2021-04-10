@@ -1,0 +1,6 @@
+.inputBlock textarea {
+  border: 5px solid brown;
+}
+.error {
+  color: brown;
+}
