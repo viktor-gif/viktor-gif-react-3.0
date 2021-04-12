@@ -10,8 +10,8 @@ const Header = (props) => {
       />
       {props.isAuth ? (
         <div className={s.loginBlock}>
-          <span className={s.firstItemLoginBlock}>{props.userData.login}</span>
-          <button>Log out</button>
+          <span className={s.firstItemLoginBlock}>{props.login}</span>
+          <button onClick={props.logout}>Log out</button>
         </div>
       ) : (
         <div className={s.loginBlock}>

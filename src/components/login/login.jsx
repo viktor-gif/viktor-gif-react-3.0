@@ -49,8 +49,7 @@ const LoginReduxForm = reduxForm({
 
 const Login = (props) => {
   let submit = (values) => {
-    debugger;
-    console.log(values);
+    props.login(values.email, values.password, values.rememberMe);
   };
 
   return (

@@ -3,7 +3,9 @@ import { authAPI } from "../api/api";
 const SET_AUTH_DATA = "SET_AUTH_DATA";
 
 let initialState = {
-  userData: null,
+  userId: null,
+  login: null,
+  email: null,
   isAuth: false,
 };
 
@@ -12,22 +14,37 @@ const authReducer = (state = initialState, action) => {
     case SET_AUTH_DATA:
       return {
         ...state,
-        userData: action.data, //object {id, login, email}
-        isAuth: true,
+        ...action.data,
       };
     default:
       return state;
   }
 };
-export const setAuthData = (data) => ({
+export const setAuthData = (userId, login, email, isAuth) => ({
   type: SET_AUTH_DATA,
-  data,
+  data: { userId, login, email, isAuth },
 });
 
+//redux-thunks
 export const getAuthData = () => (dispatch) => {
   authAPI.getAuthData().then((response) => {
     if (response.data.resultCode === 0) {
-      dispatch(setAuthData(response.data.data));
+      let { userId, login, email } = response.data.data;
+      dispatch(setAuthData(userId, login, email, true));
+    }
+  });
+};
+export const login = (email, password, rememberMe) => (dispatch) => {
+  authAPI.login(email, password, rememberMe).then((response) => {
+    if (response.data.resultCode === 0) {
+      dispatch(getAuthData());
+    }
+  });
+};
+export const logout = () => (dispatch) => {
+  authAPI.logout().then((response) => {
+    if (response.data.resultCode === 0) {
+      dispatch(setAuthData(null, null, null, false));
     }
   });
 };
