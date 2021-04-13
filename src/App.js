@@ -9,20 +9,16 @@ import DialogsContainer from "./components/dialogs/dialogsContainer";
 import UsersContainer from "./components/users/usersContainer";
 import LoginContainer from "./components/login/loginContainer";
 import { getAuthData } from "./redux/auth-reducer";
-import { initialize, fake } from "./redux/app-reducer";
+import { initialize } from "./redux/app-reducer";
 import { connect } from "react-redux";
 
 class App extends React.Component {
   componentDidMount() {
     this.props.getAuthData();
     this.props.initialize();
-    setInterval(() => {
-      this.props.fake();
-    }, 1000);
   }
 
   render() {
-    this.props.fakes && console.log(this.props.fakes);
     if (!this.props.initialized) {
       return <h1>Loading...</h1>;
     }
@@ -47,7 +43,6 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => ({
   initialized: state.app.initialized,
-  fakes: state.app.fakes,
 });
 
-export default connect(mapStateToProps, { getAuthData, initialize, fake })(App);
+export default connect(mapStateToProps, { getAuthData, initialize })(App);

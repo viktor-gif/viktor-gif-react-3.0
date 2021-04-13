@@ -1,11 +1,9 @@
-import { authAPI } from "../api/api";
 import { getAuthData } from "./auth-reducer";
 
 const INITIALIZE_SUCCESS = "INITIALIZE_SUCCESS";
 
 let initialState = {
   initialized: false,
-  fakes: 10,
 };
 
 const appReducer = (state = initialState, action) => {
@@ -15,17 +13,11 @@ const appReducer = (state = initialState, action) => {
         ...state,
         initialized: true,
       };
-    case "fake":
-      return {
-        ...state,
-        fakes: state.fakes + 1,
-      };
     default:
       return state;
   }
 };
 export const initializeSuccess = () => ({ type: INITIALIZE_SUCCESS });
-export const fake = () => ({ type: "fake" });
 
 //redux-thunks
 export const initialize = () => (dispatch) => {
