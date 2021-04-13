@@ -6,6 +6,7 @@ import {
   required,
 } from "../../validators/validators";
 import { Input } from "../common/formControls/formControls";
+import s from "./login.module.css";
 
 let minLength5 = minLengthCreator(5);
 let maxLength12 = maxLengthCreator(12);
@@ -36,6 +37,7 @@ const LoginForm = (props) => {
         Remember me
         <Field name="rememberMe" component={Input} type="checkbox" />
       </div>
+      {props.error && <div className={s.summaryError}>{props.error}</div>}
       <div>
         <button>Log in</button>
       </div>

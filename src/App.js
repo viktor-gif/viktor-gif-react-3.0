@@ -1,3 +1,4 @@
+import React from "react";
 import "./App.css";
 import HeaderContainer from "./components/header/HeaderContainer";
 import Navbar from "./components/navbar/navbar";
@@ -7,24 +8,46 @@ import { BrowserRouter, Route } from "react-router-dom";
 import DialogsContainer from "./components/dialogs/dialogsContainer";
 import UsersContainer from "./components/users/usersContainer";
 import LoginContainer from "./components/login/loginContainer";
+import { getAuthData } from "./redux/auth-reducer";
+import { initialize, fake } from "./redux/app-reducer";
+import { connect } from "react-redux";
 
-function App(props) {
-  return (
-    <BrowserRouter>
-      <div className="App">
-        <HeaderContainer />
-        <Navbar />
-        <div className="content-wrapper">
-          <Route path="/profile/:userId?" render={() => <Profile />} />
-          <Route path="/dialogs" render={() => <DialogsContainer />} />
-          <Route path="/users" render={() => <UsersContainer />} />
-          <Route path="/login" render={() => <LoginContainer />} />
+class App extends React.Component {
+  componentDidMount() {
+    this.props.getAuthData();
+    this.props.initialize();
+    setInterval(() => {
+      this.props.fake();
+    }, 1000);
+  }
+
+  render() {
+    this.props.fakes && console.log(this.props.fakes);
+    if (!this.props.initialized) {
+      return <h1>Loading...</h1>;
+    }
+    return (
+      <BrowserRouter>
+        <div className="App">
+          <HeaderContainer />
+          <Navbar />
+          <div className="content-wrapper">
+            <Route path="/profile/:userId?" render={() => <Profile />} />
+            <Route path="/dialogs" render={() => <DialogsContainer />} />
+            <Route path="/users" render={() => <UsersContainer />} />
+            <Route path="/login" render={() => <LoginContainer />} />
+          </div>
+
+          <Footer />
         </div>
-
-        <Footer />
-      </div>
-    </BrowserRouter>
-  );
+      </BrowserRouter>
+    );
+  }
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  initialized: state.app.initialized,
+  fakes: state.app.fakes,
+});
+
+export default connect(mapStateToProps, { getAuthData, initialize, fake })(App);

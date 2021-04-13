@@ -91,7 +91,7 @@ export const toggleFollowingProgress = (progress) => ({
 });
 
 //redux-thunks
-export const getUsers = (selectedPage = 1, pageSize = 10) => (dispatch) => {
+export const requestUsers = (selectedPage = 1, pageSize = 10) => (dispatch) => {
   dispatch(setToggleFetching(true));
   usersAPI.getUsers(selectedPage, pageSize).then((response) => {
     dispatch(setToggleFetching(false));
