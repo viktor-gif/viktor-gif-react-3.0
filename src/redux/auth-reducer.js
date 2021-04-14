@@ -1,7 +1,7 @@
 import { stopSubmit } from "redux-form";
 import { authAPI } from "../api/api";
 
-const SET_AUTH_DATA = "SET_AUTH_DATA";
+const SET_AUTH_DATA = "vgif/auth/SET_AUTH_DATA";
 
 let initialState = {
   userId: null,

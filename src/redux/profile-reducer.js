@@ -1,9 +1,9 @@
 import { profileAPI } from "../api/api";
 
-const ADD_POST = "ADD_POST";
-const DELETE_POST = "DELETE_POST";
-const SET_PROFILE = "SET_PROFILE";
-const SET_STATUS = "SET_STATUS";
+const ADD_POST = "vgif/profile/ADD_POST";
+const DELETE_POST = "vgif/profile/DELETE_POST";
+const SET_PROFILE = "vgif/profile/SET_PROFILE";
+const SET_STATUS = "vgif/profile/SET_STATUS";
 
 let initialState = {
   posts: [

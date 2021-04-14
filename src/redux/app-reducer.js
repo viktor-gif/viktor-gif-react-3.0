@@ -1,6 +1,6 @@
 import { getAuthData } from "./auth-reducer";
 
-const INITIALIZE_SUCCESS = "INITIALIZE_SUCCESS";
+const INITIALIZE_SUCCESS = "vgif/app/INITIALIZE_SUCCESS";
 
 let initialState = {
   initialized: false,
