@@ -9,7 +9,13 @@ const MyPosts = (props) => {
   const postsElements = [...props.profilePage.posts]
     .reverse()
     .map((p) => (
-      <Post key={p.id} id={p.id} post={p.post} likesCount={p.likesCount} />
+      <Post
+        key={p.id}
+        id={p.id}
+        post={p.post}
+        likesCount={p.likesCount}
+        deletePost={props.deletePost}
+      />
     ));
 
   const submit = (values) => {

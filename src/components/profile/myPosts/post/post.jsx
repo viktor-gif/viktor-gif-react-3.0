@@ -3,6 +3,7 @@ import s from "./post.module.css";
 
 const Post = React.memo((props) => {
   console.log("render");
+
   return (
     <div className={s.post}>
       <div className={s.postImg}>
@@ -13,6 +14,7 @@ const Post = React.memo((props) => {
       </div>
       <div>{props.post}</div>
       <div className={s.likes}>Likes: {props.likesCount}</div>
+      <button onClick={() => props.deletePost(props.id)}>Delete post</button>
     </div>
   );
 });
