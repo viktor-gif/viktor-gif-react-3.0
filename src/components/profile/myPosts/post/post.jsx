@@ -1,7 +1,8 @@
 import React from "react";
 import s from "./post.module.css";
 
-const Post = (props) => {
+const Post = React.memo((props) => {
+  console.log("render");
   return (
     <div className={s.post}>
       <div className={s.postImg}>
@@ -14,6 +15,6 @@ const Post = (props) => {
       <div className={s.likes}>Likes: {props.likesCount}</div>
     </div>
   );
-};
+});
 
 export default Post;

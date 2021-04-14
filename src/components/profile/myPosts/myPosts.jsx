@@ -13,6 +13,7 @@ const MyPosts = (props) => {
   const submit = (values) => {
     props.addPost(values.postText);
   };
+
   return (
     <div className={s.myPosts}>
       <div>
