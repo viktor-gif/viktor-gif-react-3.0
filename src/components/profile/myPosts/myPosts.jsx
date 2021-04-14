@@ -6,9 +6,11 @@ import s from "./myPosts.module.css";
 import Post from "./post/post";
 
 const MyPosts = (props) => {
-  const postsElements = props.profilePage.posts.map((p) => (
-    <Post key={p.id} id={p.id} post={p.post} likesCount={p.likesCount} />
-  ));
+  const postsElements = [...props.profilePage.posts]
+    .reverse()
+    .map((p) => (
+      <Post key={p.id} id={p.id} post={p.post} likesCount={p.likesCount} />
+    ));
 
   const submit = (values) => {
     props.addPost(values.postText);
