@@ -1,0 +1,13 @@
+.pages {
+  margin-bottom: 20px;
+}
+.pages span {
+  margin-right: 10px;
+  padding: 5px;
+  background-color: darkgrey;
+  cursor: pointer;
+}
+.selectedPage {
+  font-weight: bold;
+  color: gold;
+}

@@ -2,6 +2,7 @@ import React from "react";
 import s from "./users.module.css";
 import userAvatar from "../../img/ava.png";
 import { NavLink } from "react-router-dom";
+import Paginator from "../common/paginator/paginator";
 
 const Users = (props) => {
   const usersItems = props.users.map((u) => {
@@ -41,26 +42,14 @@ const Users = (props) => {
     );
   });
 
-  const pagesCount = Math.ceil(props.totalUsersCount / props.pageSize);
-  let pagesArr = [];
-  for (let i = 1; i <= pagesCount; i++) {
-    pagesArr.push(i);
-  }
-  const pages = pagesArr.map((p) => {
-    return (
-      <span
-        onClick={() => props.setCurrentPage(p)}
-        className={props.selectedPage === p ? s.selectedPage : ""}
-        key={p}
-      >
-        {p}
-      </span>
-    );
-  });
-
   return (
     <div>
-      <div className={s.pages}>{pages}</div>
+      <Paginator
+        totalUsersCount={props.totalUsersCount}
+        pageSize={props.pageSize}
+        selectedPage={props.selectedPage}
+        setCurrentPage={props.setCurrentPage}
+      />
       {usersItems}
     </div>
   );
