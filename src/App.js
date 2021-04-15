@@ -1,5 +1,7 @@
 import React from "react";
 import "./App.css";
+import { Provider } from "react-redux";
+import store from "./redux/redux-store";
 import HeaderContainer from "./components/header/HeaderContainer";
 import Navbar from "./components/navbar/navbar";
 import Profile from "./components/profile/profile";
@@ -45,4 +47,16 @@ const mapStateToProps = (state) => ({
   initialized: state.app.initialized,
 });
 
-export default connect(mapStateToProps, { getAuthData, initialize })(App);
+const AppContainer = connect(mapStateToProps, { getAuthData, initialize })(App);
+
+const ViktorGifApp = (props) => {
+  return (
+    <Provider store={store}>
+      <React.StrictMode>
+        <AppContainer />
+      </React.StrictMode>
+    </Provider>
+  );
+};
+
+export default ViktorGifApp;

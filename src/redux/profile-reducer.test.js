@@ -17,7 +17,7 @@ test("state should be incremented", () => {
 test("first post should contain 'Hello!' text", () => {
   let action = addPost("Hello React!");
   let newState = profileReducer(state, action);
-  expect(newState.posts[0].post).toBe("Hello React!");
+  expect(newState.posts[newState.posts.length - 1].post).toBe("Hello React!");
 });
 
 test("state should be decremented", () => {
