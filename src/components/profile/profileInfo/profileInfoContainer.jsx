@@ -11,7 +11,7 @@ import {
 import { compose } from "redux";
 
 class ProfileInfoContainer extends React.Component {
-  componentDidMount() {
+  requestInfoProfile() {
     let userId = this.props.match.params.userId;
     if (!userId) {
       userId = this.props.authUserId;
@@ -19,6 +19,16 @@ class ProfileInfoContainer extends React.Component {
     this.props.getProfile(userId);
     this.props.getStatus(userId);
   }
+
+  componentDidMount() {
+    this.requestInfoProfile();
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props.match.params.userId !== prevProps.match.params.userId) {
+      this.requestInfoProfile();
+    }
+  }
+
   render() {
     return (
       <>
