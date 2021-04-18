@@ -18,11 +18,19 @@ const ProfileInfo = (props) => {
     </div>
   ));
 
+  const onPhotoChange = (e) => {
+    if (e.target.files.length) {
+      props.setProfilePhoto(e.target.files[0]);
+    }
+  };
+
   return (
     <div>
-      <div>
+      <div className={s.mainImgProfile}>
         <img src={info.photos.large || avatar} alt="userPhoto" />
+        {props.isOwner && <input onChange={onPhotoChange} type="file" />}
       </div>
+
       <ProfileStatus status={props.status} updateStatus={props.updateStatus} />
       <div>{info.fullName}</div>
       <div>

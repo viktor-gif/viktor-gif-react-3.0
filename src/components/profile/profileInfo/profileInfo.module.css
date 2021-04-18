@@ -8,3 +8,24 @@
   font-weight: bold;
   font-size: 20px;
 }
+
+.mainImgProfile {
+  position: relative;
+  display: inline-block;
+}
+.mainImgProfile:hover input {
+  opacity: 1;
+}
+.mainImgProfile:hover img {
+  opacity: 0.5;
+}
+.mainImgProfile img {
+  max-width: 200px;
+}
+.mainImgProfile input {
+  position: absolute;
+  z-index: 1000;
+  top: 45%;
+  left: 32%;
+  opacity: 0;
+}

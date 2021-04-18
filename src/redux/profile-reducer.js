@@ -4,6 +4,8 @@ const ADD_POST = "vgif/profile/ADD_POST";
 const DELETE_POST = "vgif/profile/DELETE_POST";
 const SET_PROFILE = "vgif/profile/SET_PROFILE";
 const SET_STATUS = "vgif/profile/SET_STATUS";
+const LOAD_PROFILE_PHOTO = "vgif/profile/LOAD_PROFILE_PHOTO";
+const SAVE_PHOTO_SUCCESS = "vgif/profile/SAVE_PHOTO_SUCCESS";
 
 let initialState = {
   posts: [
@@ -42,6 +44,11 @@ const profileReducer = (state = initialState, action) => {
         ...state,
         status: action.status,
       };
+    case SAVE_PHOTO_SUCCESS:
+      return {
+        ...state,
+        profileInfo: { ...state.profileInfo, photos: action.photoFile },
+      };
     default:
       return state;
   }
@@ -52,6 +59,11 @@ export const deletePost = (id) => ({ type: DELETE_POST, id });
 
 export const setProfile = (profileInfo) => ({ type: SET_PROFILE, profileInfo });
 export const setStatus = (status) => ({ type: SET_STATUS, status });
+export const loadProfilePhoto = (file) => ({ type: LOAD_PROFILE_PHOTO, file });
+export const savePhotoSuccess = (photoFile) => ({
+  type: SAVE_PHOTO_SUCCESS,
+  photoFile,
+});
 
 //redux-thunk
 export const getProfile = (userId) => (dispatch) => {
@@ -68,6 +80,13 @@ export const updateStatus = (status) => (dispatch) => {
   profileAPI.updateStatus(status).then((response) => {
     if (response.data.resultCode === 0) {
       dispatch(setStatus(status));
+    }
+  });
+};
+export const setProfilePhoto = (file) => (dispatch) => {
+  profileAPI.setProfilePhoto(file).then((response) => {
+    if (response.data.resultCode === 0) {
+      dispatch(savePhotoSuccess(response.data.data.photos));
     }
   });
 };
