@@ -5,7 +5,7 @@ import store from "./redux/redux-store";
 import HeaderContainer from "./components/header/HeaderContainer";
 import Navbar from "./components/navbar/navbar";
 import Footer from "./components/footer/footer";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import UsersContainer from "./components/users/usersContainer";
 import LoginContainer from "./components/login/loginContainer";
 import { getAuthData } from "./redux/auth-reducer";
@@ -32,28 +32,34 @@ class App extends React.Component {
           <HeaderContainer />
           <Navbar />
           <div className="content-wrapper">
-            <Route
-              path="/profile/:userId?"
-              render={() => {
-                return (
-                  <React.Suspense fallback={<div>Loading...</div>}>
-                    <Profile />
-                  </React.Suspense>
-                );
-              }}
-            />
-            <Route
-              path="/dialogs"
-              render={() => {
-                return (
-                  <React.Suspense fallback={<div>Loading...</div>}>
-                    <DialogsContainer />
-                  </React.Suspense>
-                );
-              }}
-            />
-            <Route path="/users" render={() => <UsersContainer />} />
-            <Route path="/login" render={() => <LoginContainer />} />
+            <Switch>
+              {/* <Route exact path="/" render={() => <Redirect to="/profile" />} /> */}
+              <Route
+                path="/profile/:userId?"
+                render={() => {
+                  return (
+                    <React.Suspense fallback={<div>Loading...</div>}>
+                      <Profile />
+                    </React.Suspense>
+                  );
+                }}
+              />
+              <Route
+                path="/dialogs"
+                render={() => {
+                  return (
+                    <React.Suspense fallback={<div>Loading...</div>}>
+                      <DialogsContainer />
+                    </React.Suspense>
+                  );
+                }}
+              />
+              <Route path="/users" render={() => <UsersContainer />} />
+              <Route path="/login/facebook" render={() => <h1>Facebook</h1>} />
+              <Route path="/login" render={() => <LoginContainer />} />
+              <Redirect from="/" to="/profile" />
+              <Route path="*" render={() => <div>404 NOT FOUND!</div>} />
+            </Switch>
           </div>
 
           <Footer />
