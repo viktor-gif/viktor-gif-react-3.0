@@ -1,1 +1,8 @@
-
+.myPosts {
+  margin-top: 20px;
+}
+.myPostsTitle {
+  font-size: 25px;
+  text-align: center;
+  margin-bottom: 20px;
+}

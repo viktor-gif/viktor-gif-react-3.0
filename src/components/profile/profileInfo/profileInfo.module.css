@@ -1,6 +1,16 @@
 .contacts {
-  margin-top: 20px;
+  margin: 10px 0;
+  font-weight: bold;
+  font-size: 20px;
 }
+
+.fullName {
+  font-weight: bold;
+  font-size: 20px;
+  color: darkslategray;
+  margin: 10px 0 10px 5%;
+}
+
 .contactsNames {
   font-weight: bold;
 }
@@ -28,4 +38,24 @@
   top: 45%;
   left: 32%;
   opacity: 0;
+}
+
+.aboutInfo span {
+  font-weight: bold;
+}
+
+.contactsItems {
+  margin-left: 20px;
+  font-weight: normal;
+  font-size: 16px;
+}
+.contactsItems span {
+  font-weight: bold;
+}
+
+.summaryError {
+  display: inline-block;
+  color: red;
+  border: 2px solid red;
+  padding: 5px;
 }

@@ -1,3 +1,4 @@
+import { stopSubmit } from "redux-form";
 import { profileAPI } from "../api/api";
 
 const ADD_POST = "vgif/profile/ADD_POST";
@@ -89,6 +90,20 @@ export const setProfilePhoto = (file) => (dispatch) => {
       dispatch(savePhotoSuccess(response.data.data.photos));
     }
   });
+};
+export const updateProfileInfo = (info) => async (dispatch, getState) => {
+  const userId = getState().auth.userId;
+  let response = await profileAPI.updateProfileInfo(info);
+  if (response.data.resultCode === 0) {
+    dispatch(getProfile(userId));
+  } else {
+    let errorMessage =
+      response.data.messages.length > 0
+        ? response.data.messages[0]
+        : "some error";
+    dispatch(stopSubmit("profile-info", { _error: errorMessage }));
+    return Promise.reject(response.data.messages[0]);
+  }
 };
 
 export default profileReducer;

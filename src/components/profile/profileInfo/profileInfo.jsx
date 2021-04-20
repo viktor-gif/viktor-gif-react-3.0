@@ -1,27 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import Preloader from "../../common/preloader/preloader";
 import ProfileStatus from "./profileStatus";
 import s from "./profileInfo.module.css";
 import avatar from "../../../img/ava.png";
+import ProfileInfoForm from "./profileInfoForm";
 
 const ProfileInfo = (props) => {
+  const [editMode, setEditMode] = useState(false);
+
   if (!props.profileInfo) {
     return <Preloader />;
   }
   const info = props.profileInfo;
 
-  let contacts = Object.entries(info.contacts);
-  let contactsItems = contacts.map((item) => (
-    <div className={s.contactsItems} key={item[0]}>
-      <span className={s.contactsNames}>{item[0]}</span>
-      <span className={s.contactsValues}>{": " + item[1]}</span>
-    </div>
-  ));
-
   const onPhotoChange = (e) => {
     if (e.target.files.length) {
       props.setProfilePhoto(e.target.files[0]);
     }
+  };
+
+  const edit = () => {
+    setEditMode(true);
+  };
+
+  const submit = (value) => {
+    let promise = props.updateProfileInfo(value);
+    promise.then(() => {
+      setEditMode(false);
+    });
   };
 
   return (
@@ -32,22 +38,40 @@ const ProfileInfo = (props) => {
       </div>
 
       <ProfileStatus status={props.status} updateStatus={props.updateStatus} />
-      <div>{info.fullName}</div>
-      <div>
-        <span>About me</span>: {info.aboutMe}
-      </div>
-      <div>
-        <span>Looking for a job</span>: {info.lookingForAJob}
-      </div>
-      <div>
-        <span>Looking for a job description</span>:{" "}
-        {info.lookingForAJobDescription}
-      </div>
-      <div className={s.contacts}>
-        <span className={s.contactsSpan}>contacts</span>: {contactsItems}
-      </div>
+      {editMode ? (
+        <ProfileInfoForm initialValues={info} info={info} onSubmit={submit} />
+      ) : (
+        <Info info={info} edit={edit} />
+      )}
     </div>
   );
 };
-// `${key}: ${info.contacts[key]}`
+
+const Info = ({ info, edit }) => {
+  let contacts = Object.keys(info.contacts).map((key) => {
+    return (
+      <div className={s.contactsItems} key={key}>
+        <span>{key}</span>: {info.contacts[key]}
+      </div>
+    );
+  });
+  return (
+    <div>
+      <button onClick={edit}>edit</button>
+      <div className={s.fullName}>{info.fullName}</div>
+      <div className={s.aboutInfo}>
+        <span>About me</span>: {info.aboutMe}
+      </div>
+      <div className={s.aboutInfo}>
+        <span>Looking for a job</span>: {info.lookingForAJob}
+      </div>
+      <div className={s.aboutInfo}>
+        <span>Looking for a job description</span>:{" "}
+        {info.lookingForAJobDescription}
+      </div>
+      <div className={s.contacts}>contacts: {contacts}</div>
+    </div>
+  );
+};
+
 export default ProfileInfo;

@@ -24,10 +24,10 @@ const MyPosts = (props) => {
 
   return (
     <div className={s.myPosts}>
+      <div className={s.myPostsTitle}>My posts</div>
       <div>
         <PostReduxForm onSubmit={submit} />
       </div>
-      <div>My posts</div>
       {postsElements}
     </div>
   );

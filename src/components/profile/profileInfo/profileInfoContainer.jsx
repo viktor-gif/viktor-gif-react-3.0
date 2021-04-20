@@ -7,6 +7,7 @@ import {
   getStatus,
   updateStatus,
   setProfilePhoto,
+  updateProfileInfo,
 } from "../../../redux/profile-reducer";
 // import withAuthRedirect from "../../common/withAuthRedirect/withAuthRedirect";
 import { compose } from "redux";
@@ -39,6 +40,7 @@ class ProfileInfoContainer extends React.Component {
           status={this.props.status}
           updateStatus={this.props.updateStatus}
           setProfilePhoto={this.props.setProfilePhoto}
+          updateProfileInfo={this.props.updateProfileInfo}
         />
       </>
     );
@@ -58,6 +60,7 @@ export default compose(
     getStatus,
     updateStatus,
     setProfilePhoto,
+    updateProfileInfo,
   }),
   withRouter
   // withAuthRedirect

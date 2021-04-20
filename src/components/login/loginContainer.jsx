@@ -2,4 +2,9 @@ import Login from "./login";
 import { login, logout } from "../../redux/auth-reducer";
 import { connect } from "react-redux";
 
-export default connect(null, { login, logout })(Login);
+const mapStateToProps = (state) => ({
+  captchaUrl: state.auth.captchaUrl,
+  isAuth: state.auth.isAuth,
+});
+
+export default connect(mapStateToProps, { login, logout })(Login);
