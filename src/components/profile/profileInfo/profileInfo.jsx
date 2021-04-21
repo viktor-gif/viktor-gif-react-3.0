@@ -4,6 +4,7 @@ import ProfileStatus from "./profileStatus";
 import s from "./profileInfo.module.css";
 import avatar from "../../../img/ava.png";
 import ProfileInfoForm from "./profileInfoForm";
+import cn from "classnames";
 
 const ProfileInfo = (props) => {
   const [editMode, setEditMode] = useState(false);
@@ -32,7 +33,11 @@ const ProfileInfo = (props) => {
 
   return (
     <div>
-      <div className={s.mainImgProfile}>
+      <div
+        className={cn(s.mainImgProfile, {
+          [s.mainImgOwnerProfile]: props.isOwner,
+        })}
+      >
         <img src={info.photos.large || avatar} alt="userPhoto" />
         {props.isOwner && <input onChange={onPhotoChange} type="file" />}
       </div>

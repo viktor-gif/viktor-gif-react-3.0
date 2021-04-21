@@ -77,12 +77,15 @@ export const getStatus = (userId) => (dispatch) => {
     dispatch(setStatus(response.data));
   });
 };
-export const updateStatus = (status) => (dispatch) => {
-  profileAPI.updateStatus(status).then((response) => {
+export const updateStatus = (status) => async (dispatch) => {
+  try {
+    let response = await profileAPI.updateStatus(status);
     if (response.data.resultCode === 0) {
       dispatch(setStatus(status));
     }
-  });
+  } catch (error) {
+    console.log(error);
+  }
 };
 export const setProfilePhoto = (file) => (dispatch) => {
   profileAPI.setProfilePhoto(file).then((response) => {

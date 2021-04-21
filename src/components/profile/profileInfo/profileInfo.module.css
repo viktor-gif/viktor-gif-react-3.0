@@ -26,7 +26,7 @@
 .mainImgProfile:hover input {
   opacity: 1;
 }
-.mainImgProfile:hover img {
+.mainImgOwnerProfile:hover img {
   opacity: 0.5;
 }
 .mainImgProfile img {
