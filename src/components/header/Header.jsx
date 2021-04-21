@@ -1,5 +1,6 @@
 import React from "react";
 import s from "./Header.module.css";
+import { NavLink } from "react-router-dom";
 
 const Header = (props) => {
   return (
@@ -15,7 +16,9 @@ const Header = (props) => {
         </div>
       ) : (
         <div className={s.loginBlock}>
-          <button className={s.firstItemLoginBlock}>Log in</button>
+          <NavLink to="/login">
+            <button className={s.firstItemLoginBlock}>Log in</button>
+          </NavLink>
           <button>Sign in</button>
         </div>
       )}
