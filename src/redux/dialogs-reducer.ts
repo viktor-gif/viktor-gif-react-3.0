@@ -1,5 +1,11 @@
 const ADD_MESSAGE = "vgif/dialogs/ADD_MESSAGE";
 
+type initialStateType = {
+  dialogs: Array<dialogsType>;
+  messages: Array<messagesType>;
+};
+type messagesType = { id: number; message: string };
+type dialogsType = { id: number; name: string };
 const initialState = {
   dialogs: [
     { id: 1, name: "Youlia" },
@@ -13,7 +19,10 @@ const initialState = {
   ],
 };
 
-const dialogsReducer = (state = initialState, action) => {
+const dialogsReducer = (
+  state = initialState,
+  action: any
+): initialStateType => {
   switch (action.type) {
     case ADD_MESSAGE:
       let newMessage = {
@@ -23,7 +32,7 @@ const dialogsReducer = (state = initialState, action) => {
       return {
         ...state,
         messages: [...state.messages, newMessage],
-        messageText: "",
+        // messageText: "",
       };
 
     default:
@@ -31,6 +40,13 @@ const dialogsReducer = (state = initialState, action) => {
   }
 };
 
-export const addMessage = (message) => ({ type: ADD_MESSAGE, message });
+type addMessageType = {
+  type: typeof ADD_MESSAGE;
+  message: string;
+};
+export const addMessage = (message: string): addMessageType => ({
+  type: ADD_MESSAGE,
+  message,
+});
 
 export default dialogsReducer;
