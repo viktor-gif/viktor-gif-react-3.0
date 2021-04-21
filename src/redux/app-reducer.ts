@@ -2,11 +2,17 @@ import { getAuthData } from "./auth-reducer";
 
 const INITIALIZE_SUCCESS = "vgif/app/INITIALIZE_SUCCESS";
 
-let initialState = {
+type initialStateType = {
+  initialized: boolean;
+};
+const initialState: initialStateType = {
   initialized: false,
 };
 
-const appReducer = (state = initialState, action) => {
+const appReducer = (
+  state = initialState,
+  action: initializeSuccessType
+): initialStateType => {
   switch (action.type) {
     case INITIALIZE_SUCCESS:
       return {
@@ -17,10 +23,15 @@ const appReducer = (state = initialState, action) => {
       return state;
   }
 };
-export const initializeSuccess = () => ({ type: INITIALIZE_SUCCESS });
+type initializeSuccessType = {
+  type: typeof INITIALIZE_SUCCESS;
+};
+export const initializeSuccess = (): initializeSuccessType => ({
+  type: INITIALIZE_SUCCESS,
+});
 
 //redux-thunks
-export const initialize = () => (dispatch) => {
+export const initialize = () => (dispatch: any) => {
   let promise = dispatch(getAuthData());
   promise.then(() => {
     dispatch(initializeSuccess());

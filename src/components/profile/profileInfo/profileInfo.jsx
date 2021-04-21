@@ -46,13 +46,13 @@ const ProfileInfo = (props) => {
       {editMode ? (
         <ProfileInfoForm initialValues={info} info={info} onSubmit={submit} />
       ) : (
-        <Info info={info} edit={edit} />
+        <Info info={info} edit={edit} isOwner={props.isOwner} />
       )}
     </div>
   );
 };
 
-const Info = ({ info, edit }) => {
+const Info = ({ info, edit, isOwner }) => {
   let contacts = Object.keys(info.contacts).map((key) => {
     return (
       <div className={s.contactsItems} key={key}>
@@ -62,7 +62,7 @@ const Info = ({ info, edit }) => {
   });
   return (
     <div>
-      <button onClick={edit}>edit</button>
+      {isOwner && <button onClick={edit}>edit</button>}
       <div className={s.fullName}>{info.fullName}</div>
       <div className={s.aboutInfo}>
         <span>About me</span>: {info.aboutMe}
