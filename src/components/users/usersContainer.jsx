@@ -18,7 +18,7 @@ import {
   getSelectedPage,
   getTotalUsersCount,
   getUsers,
-} from "../../redux/selectors/user-selectors";
+} from "../../redux/selectors/user-selectors.ts";
 
 class UsersContainer extends React.Component {
   componentDidMount() {
