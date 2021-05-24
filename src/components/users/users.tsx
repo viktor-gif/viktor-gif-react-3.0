@@ -3,8 +3,20 @@ import s from "./users.module.css";
 import userAvatar from "../../img/ava.png";
 import { NavLink } from "react-router-dom";
 import Paginator from "../common/paginator/paginator";
+import { userType } from "../../Types";
 
-const Users = (props) => {
+type propsType = {
+  users: Array<userType>;
+  follow: (userId: number) => void;
+  unfollow: (userId: number) => void;
+  followingInProgress: Array<number>;
+  totalUsersCount: number;
+  pageSize: number;
+  selectedPage: number;
+  setCurrentPage: () => void;
+};
+
+const Users: React.FC<propsType> = (props) => {
   const usersItems = props.users.map((u) => {
     return (
       <div key={u.id} className={s.user}>

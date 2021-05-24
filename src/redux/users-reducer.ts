@@ -1,5 +1,6 @@
 import { usersAPI } from "../api/api";
 import { photosType } from "../Types";
+import { userType } from "../Types";
 
 const SET_USERS = "vgif/users/SET_USERS";
 const FOLLOW = "vgif/users/FOLLOW";
@@ -8,14 +9,6 @@ const SET_CURRENT_PAGE = "vgif/users/SET_CURRENT_PAGE";
 const SET_TOTAL_USERS_COUNT = "vgif/users/SET_TOTAL_USERS_COUNT";
 const TOGGLE_IS_FETCHING = "vgif/users/TOGGLE_IS_FETCHING";
 const TOGGLE_FOLLOWING_PROGRESS = "vgif/users/TOGGLE_FOLLOWING_PROGRESS";
-
-type userType = {
-  id: number;
-  name: string;
-  status: string;
-  photos: photosType;
-  followed: boolean;
-};
 
 let initialState = {
   users: [] as Array<userType>,
