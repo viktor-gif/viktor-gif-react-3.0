@@ -13,7 +13,7 @@ type propsType = {
   totalUsersCount: number;
   pageSize: number;
   selectedPage: number;
-  setCurrentPage: () => void;
+  setCurrentPage: (pageNumber: number) => void;
 };
 
 const Users: React.FC<propsType> = (props) => {

@@ -5,9 +5,6 @@ import {
   follow,
   unfollow,
   setCurrentPage,
-  setTotalUsersCount,
-  setToggleFetching,
-  toggleFollowingProgress,
 } from "../../redux/users-reducer";
 import Users from "./users";
 import Preloader from "../common/preloader/preloader";
@@ -18,22 +15,43 @@ import {
   getSelectedPage,
   getTotalUsersCount,
   getUsers,
-} from "../../redux/selectors/user-selectors.ts";
+} from "../../redux/selectors/user-selectors";
+import { userType } from "../../Types";
+import { appStateType } from "../../redux/redux-store";
+import { compose } from "redux";
 
-class UsersContainer extends React.Component {
+type mapStatePropsType = {
+  pageSize: number;
+  selectedPage: number;
+  isFetching: boolean;
+  totalUsersCount: number;
+  users: Array<userType>;
+  followingInProgress: Array<number>;
+};
+type mapDispatchPropsType = {
+  requestUsers: (currentPage: number, pageSize: number) => void;
+  setCurrentPage: (currentPage: number) => void;
+  follow: (userId: number) => void;
+  unfollow: (userId: number) => void;
+};
+type ownPropsType = {};
+
+type propsType = mapStatePropsType & mapDispatchPropsType & ownPropsType;
+
+class UsersContainer extends React.Component<propsType> {
   componentDidMount() {
     this.props.requestUsers(this.props.selectedPage, this.props.pageSize);
   }
 
-  setCurrentPage = (currentPage) => {
+  setCurrentPage = (currentPage: number) => {
     this.props.setCurrentPage(currentPage);
     this.props.requestUsers(currentPage, this.props.pageSize);
   };
 
-  follow = (userId) => {
+  follow = (userId: number) => {
     this.props.follow(userId);
   };
-  unfollow = (userId) => {
+  unfollow = (userId: number) => {
     this.props.unfollow(userId);
   };
 
@@ -56,7 +74,7 @@ class UsersContainer extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: appStateType): mapStatePropsType => {
   return {
     users: getUsers(state),
     pageSize: getPageSize(state),
@@ -67,12 +85,14 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, {
-  requestUsers,
-  follow,
-  unfollow,
-  setCurrentPage,
-  setTotalUsersCount,
-  setToggleFetching,
-  toggleFollowingProgress,
-})(UsersContainer);
+export default compose(
+  connect<mapStatePropsType, mapDispatchPropsType, ownPropsType, appStateType>(
+    mapStateToProps,
+    {
+      requestUsers,
+      follow,
+      unfollow,
+      setCurrentPage,
+    }
+  )
+)(UsersContainer);
