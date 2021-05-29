@@ -4,12 +4,7 @@ import { NavLink } from "react-router-dom";
 
 type propsType = {
   isAuth: boolean;
-  login: (
-    email: string | null,
-    password: string | null,
-    rememberMe: boolean,
-    captcha: any
-  ) => void;
+  login: string | null;
   logout: () => void;
 };
 
