@@ -2,7 +2,18 @@ import React from "react";
 import s from "./Header.module.css";
 import { NavLink } from "react-router-dom";
 
-const Header = (props) => {
+type propsType = {
+  isAuth: boolean;
+  login: (
+    email: string | null,
+    password: string | null,
+    rememberMe: boolean,
+    captcha: any
+  ) => void;
+  logout: () => void;
+};
+
+const Header: React.FC<propsType> = (props) => {
   return (
     <div className={s.header}>
       <img

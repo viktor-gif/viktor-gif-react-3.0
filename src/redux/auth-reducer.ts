@@ -11,6 +11,7 @@ type initialStateType = {
   isAuth: boolean;
   captchaUrl: string | null;
 };
+
 let initialState: initialStateType = {
   userId: null,
   login: null,
@@ -78,7 +79,7 @@ export const login = (
   email: string | null,
   password: string | null,
   rememberMe: boolean,
-  captcha: string | null
+  captcha: any
 ) => (dispatch: any) => {
   authAPI.login(email, password, rememberMe, captcha).then((response) => {
     if (response.data.resultCode === 0) {
