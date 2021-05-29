@@ -7,11 +7,11 @@ import { Textarea } from "../common/formControls/formControls";
 import { maxLengthCreator, required } from "../../validators/validators";
 
 const Dialogs = (props) => {
-  const dialogsElements = props.dialogsPage.dialogs.map((d) => (
+  const dialogsElements = props.dialogs.map((d) => (
     <Dialog key={d.id} id={d.id} name={d.name} />
   ));
 
-  const messagesElements = props.dialogsPage.messages.map((m) => (
+  const messagesElements = props.messages.map((m) => (
     <Message key={m.id} id={m.id} message={m.message} />
   ));
 
