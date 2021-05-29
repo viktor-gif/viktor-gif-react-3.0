@@ -1,6 +1,9 @@
 import React from "react";
 
-const Preloader = (props) => {
+type propsType = {
+}
+
+const Preloader: React.FC<propsType> = (props) => {
   return <h1>Loading...</h1>;
 };
 
