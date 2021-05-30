@@ -173,7 +173,7 @@ export const follow = (userId: number): thunkType => (dispatch, getState) => {
     dispatch(toggleFollowingProgress([false]));
   });
 };
-export const unfollow = (userId: number) => (dispatch: any) => {
+export const unfollow = (userId: number): thunkType => (dispatch) => {
   dispatch(toggleFollowingProgress([userId]));
   usersAPI.unfollow(userId).then((response) => {
     if (response.data.resultCode === 0) {

@@ -1,6 +1,9 @@
+import { Dispatch } from "redux";
 import { stopSubmit } from "redux-form";
+import { ThunkAction } from "redux-thunk";
 import { profileAPI } from "../api/api";
 import { profileInfoType } from "../Types";
+import { appStateType } from "./redux-store";
 
 const ADD_POST = "vgif/profile/ADD_POST";
 const DELETE_POST = "vgif/profile/DELETE_POST";
@@ -24,7 +27,7 @@ let initialState = {
 
 const profileReducer = (
   state = initialState,
-  action: any
+  action: actionsTypes
 ): initialStateType => {
   switch (action.type) {
     case ADD_POST:
@@ -64,6 +67,14 @@ const profileReducer = (
       return state;
   }
 };
+
+type actionsTypes =
+  | addPostType
+  | deletePostType
+  | setProfileType
+  | setStatusType
+  | loadProfilePhotoType
+  | savePhotoSuccessType;
 
 type addPostType = { type: typeof ADD_POST; postText: string };
 export const addPost = (postText: any): addPostType => ({
@@ -107,18 +118,24 @@ export const savePhotoSuccess = (photoFile: any): savePhotoSuccessType => ({
   photoFile,
 });
 
+type dispatchType = Dispatch<actionsTypes>;
+
+type thunkType = ThunkAction<void, appStateType, unknown, actionsTypes>;
+
 //redux-thunk
-export const getProfile = (userId: number) => (dispatch: any) => {
+export const getProfile = (userId: number) => (dispatch: dispatchType) => {
   profileAPI.setProfile(userId).then((response) => {
     dispatch(setProfile(response.data));
   });
 };
-export const getStatus = (userId: number) => (dispatch: any) => {
+export const getStatus = (userId: number): thunkType => (dispatch) => {
   profileAPI.getStatus(userId).then((response) => {
     dispatch(setStatus(response.data));
   });
 };
-export const updateStatus = (status: string) => async (dispatch: any) => {
+export const updateStatus = (status: string) => async (
+  dispatch: dispatchType
+) => {
   try {
     let response = await profileAPI.updateStatus(status);
     if (response.data.resultCode === 0) {
@@ -128,7 +145,7 @@ export const updateStatus = (status: string) => async (dispatch: any) => {
     console.log(error);
   }
 };
-export const setProfilePhoto = (file: any) => (dispatch: any) => {
+export const setProfilePhoto = (file: any): thunkType => (dispatch) => {
   profileAPI.setProfilePhoto(file).then((response) => {
     if (response.data.resultCode === 0) {
       dispatch(savePhotoSuccess(response.data.data.photos));
@@ -136,20 +153,21 @@ export const setProfilePhoto = (file: any) => (dispatch: any) => {
   });
 };
 
-// thunk-creators
-export const updateProfileInfo = (info: any) => async (
-  dispatch: any,
-  getState: any
+export const updateProfileInfo = (info: profileInfoType) => async (
+  dispatch: dispatchType,
+  getState: () => appStateType
 ) => {
   const userId = getState().auth.userId;
   let response = await profileAPI.updateProfileInfo(info);
   if (response.data.resultCode === 0) {
+    // @ts-ignore
     dispatch(getProfile(userId));
   } else {
     let errorMessage =
       response.data.messages.length > 0
         ? response.data.messages[0]
         : "some error";
+    // @ts-ignore
     dispatch(stopSubmit("profile-info", { _error: errorMessage }));
     return Promise.reject(response.data.messages[0]);
   }
