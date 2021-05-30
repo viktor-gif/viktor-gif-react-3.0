@@ -1,4 +1,6 @@
+import { ThunkAction } from "redux-thunk";
 import { getAuthData } from "./auth-reducer";
+import { appStateType } from "./redux-store";
 
 const INITIALIZE_SUCCESS = "vgif/app/INITIALIZE_SUCCESS";
 
@@ -11,7 +13,7 @@ const initialState: initialStateType = {
 
 const appReducer = (
   state = initialState,
-  action: initializeSuccessType
+  action: actionsTypes
 ): initialStateType => {
   switch (action.type) {
     case INITIALIZE_SUCCESS:
@@ -23,6 +25,9 @@ const appReducer = (
       return state;
   }
 };
+
+type actionsTypes = initializeSuccessType;
+
 type initializeSuccessType = {
   type: typeof INITIALIZE_SUCCESS;
 };
@@ -30,8 +35,10 @@ export const initializeSuccess = (): initializeSuccessType => ({
   type: INITIALIZE_SUCCESS,
 });
 
+type thunkType = ThunkAction<void, appStateType, unknown, actionsTypes>;
+
 //redux-thunks
-export const initialize = () => (dispatch: any) => {
+export const initialize = (): thunkType => (dispatch) => {
   let promise = dispatch(getAuthData());
   promise.then(() => {
     dispatch(initializeSuccess());
