@@ -21,7 +21,7 @@ const initialState = {
 
 const dialogsReducer = (
   state = initialState,
-  action: any
+  action: actionsTypes
 ): initialStateType => {
   switch (action.type) {
     case ADD_MESSAGE:
@@ -39,6 +39,8 @@ const dialogsReducer = (
       return state;
   }
 };
+
+type actionsTypes = addMessageType;
 
 type addMessageType = {
   type: typeof ADD_MESSAGE;
