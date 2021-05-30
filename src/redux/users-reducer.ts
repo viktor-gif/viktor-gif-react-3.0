@@ -1,6 +1,9 @@
+import { Dispatch } from "redux";
+import { ThunkAction } from "redux-thunk";
 import { usersAPI } from "../api/api";
 import { photosType } from "../Types";
 import { userType } from "../Types";
+import { appStateType } from "./redux-store";
 
 const SET_USERS = "vgif/users/SET_USERS";
 const FOLLOW = "vgif/users/FOLLOW";
@@ -20,7 +23,10 @@ let initialState = {
 };
 type initialStateType = typeof initialState;
 
-const usersReducer = (state = initialState, action: any): initialStateType => {
+const usersReducer = (
+  state = initialState,
+  action: actionsTypes
+): initialStateType => {
   switch (action.type) {
     case SET_USERS:
       return {
@@ -72,6 +78,15 @@ const usersReducer = (state = initialState, action: any): initialStateType => {
       return state;
   }
 };
+
+type actionsTypes =
+  | setUsersType
+  | setFollowType
+  | setUnfollowType
+  | setCurrentPageType
+  | setTotalUsersCountType
+  | setToggleFetchingType
+  | toggleFollowingProgressType;
 
 type setUsersType = { type: typeof SET_USERS; users: any };
 export const setUsers = (users: any): setUsersType => ({
@@ -133,9 +148,14 @@ export const toggleFollowingProgress = (
   progress,
 });
 
+type getStateType = () => appStateType;
+type dispatchType = Dispatch<actionsTypes>;
+type thunkType = ThunkAction<void, appStateType, unknown, actionsTypes>;
+
 //redux-thunks
 export const requestUsers = (selectedPage = 1, pageSize = 10) => (
-  dispatch: any
+  dispatch: dispatchType,
+  getState: getStateType
 ) => {
   dispatch(setToggleFetching(true));
   usersAPI.getUsers(selectedPage, pageSize).then((response) => {
@@ -144,7 +164,7 @@ export const requestUsers = (selectedPage = 1, pageSize = 10) => (
     dispatch(setTotalUsersCount(response.data.totalCount));
   });
 };
-export const follow = (userId: number) => (dispatch: any) => {
+export const follow = (userId: number): thunkType => (dispatch, getState) => {
   dispatch(toggleFollowingProgress([userId]));
   usersAPI.follow(userId).then((response) => {
     if (response.data.resultCode === 0) {
