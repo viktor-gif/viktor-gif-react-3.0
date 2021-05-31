@@ -10,6 +10,12 @@ let instance = axios.create({
   },
 });
 
+export enum ResultCodesEnum {
+  Success = 0,
+  Error = 1,
+  CapthaIsRequired = 10,
+}
+
 export const securityAPI = {
   getCaptchaUrl() {
     return instance.get(`security/get-captcha-url`);

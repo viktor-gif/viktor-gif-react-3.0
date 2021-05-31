@@ -1,7 +1,7 @@
 import { Dispatch } from "redux";
 import { stopSubmit } from "redux-form";
 import { ThunkAction } from "redux-thunk";
-import { authAPI, securityAPI } from "../api/api";
+import { authAPI, ResultCodesEnum, securityAPI } from "../api/api";
 import { appStateType } from "./redux-store";
 
 const SET_AUTH_DATA = "vgif/auth/SET_AUTH_DATA";
@@ -81,7 +81,7 @@ type thunkType = ThunkAction<void, appStateType, unknown, actionsTypes>;
 export const getAuthData = () => async (dispatch: dispatchType) => {
   // return authAPI.getAuthData().then((response) => {
   let authData = await authAPI.getAuthData();
-  if (authData.resultCode === 0) {
+  if (authData.resultCode === ResultCodesEnum.Success) {
     let { id, login, email } = authData.data;
     dispatch(setAuthData(id, login, email, true));
   }
