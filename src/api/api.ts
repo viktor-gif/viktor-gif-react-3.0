@@ -16,9 +16,15 @@ export enum ResultCodesEnum {
   CapthaIsRequired = 10,
 }
 
+type securityResType = {
+  url: string;
+};
+
 export const securityAPI = {
   getCaptchaUrl() {
-    return instance.get(`security/get-captcha-url`);
+    return instance
+      .get<securityResType>(`security/get-captcha-url`)
+      .then((res) => res.data);
   },
 };
 

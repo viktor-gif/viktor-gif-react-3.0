@@ -115,8 +115,8 @@ export const logout = () => (dispatch: dispatchType) => {
   });
 };
 export const getCaptchaUrl = (): thunkType => (dispatch) => {
-  securityAPI.getCaptchaUrl().then((response) => {
-    dispatch(getCaptchaUrlSuccess(response.data.url));
+  securityAPI.getCaptchaUrl().then((data) => {
+    dispatch(getCaptchaUrlSuccess(data.url));
   });
 };
 
