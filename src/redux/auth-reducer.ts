@@ -78,13 +78,14 @@ type dispatchType = Dispatch<actionsTypes>;
 type thunkType = ThunkAction<void, appStateType, unknown, actionsTypes>;
 
 //redux-thunks
-export const getAuthData = () => (dispatch: dispatchType) => {
-  return authAPI.getAuthData().then((response) => {
-    if (response.data.resultCode === 0) {
-      let { id, login, email } = response.data.data;
-      dispatch(setAuthData(id, login, email, true));
-    }
-  });
+export const getAuthData = () => async (dispatch: dispatchType) => {
+  // return authAPI.getAuthData().then((response) => {
+  let authData = await authAPI.getAuthData();
+  if (authData.resultCode === 0) {
+    let { id, login, email } = authData.data;
+    dispatch(setAuthData(id, login, email, true));
+  }
+  // });
 };
 export const login = (
   email: string | null,
