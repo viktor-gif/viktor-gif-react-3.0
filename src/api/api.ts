@@ -22,17 +22,27 @@ export const securityAPI = {
   },
 };
 
-type getAuthDataResponseType = {
+type getAuthDataRespType = {
   data: { id: number; email: string; login: string };
   resultCode: number;
   messages: Array<string>;
 };
 
+type loginRespType = {
+  resultCode: ResultCodesEnum;
+  messages: Array<string>;
+  data: { userId: number };
+};
+
+type logoutRespType = {
+  resultCode: ResultCodesEnum;
+  messages: Array<string>;
+  data: object;
+};
+
 export const authAPI = {
   getAuthData() {
-    return instance
-      .get<getAuthDataResponseType>("auth/me")
-      .then((res) => res.data);
+    return instance.get<getAuthDataRespType>("auth/me").then((res) => res.data);
   },
   login(
     email: string | null,
@@ -40,15 +50,19 @@ export const authAPI = {
     rememberMe = false,
     captcha: string | null = null
   ) {
-    return instance.post(`auth/login`, {
-      email,
-      password,
-      rememberMe,
-      captcha,
-    });
+    return instance
+      .post<loginRespType>(`auth/login`, {
+        email,
+        password,
+        rememberMe,
+        captcha,
+      })
+      .then((res) => res.data);
   },
   logout() {
-    return instance.delete("auth/login");
+    return instance
+      .delete<logoutRespType>("auth/login")
+      .then((res) => res.data);
   },
 };
 

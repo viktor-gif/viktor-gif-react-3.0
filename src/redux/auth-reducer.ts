@@ -93,25 +93,23 @@ export const login = (
   rememberMe: boolean,
   captcha: any
 ): thunkType => (dispatch) => {
-  authAPI.login(email, password, rememberMe, captcha).then((response) => {
-    if (response.data.resultCode === 0) {
+  authAPI.login(email, password, rememberMe, captcha).then((data) => {
+    if (data.resultCode === ResultCodesEnum.Success) {
       dispatch(getAuthData());
     } else {
-      if (response.data.resultCode === 10) {
+      if (data.resultCode === ResultCodesEnum.CapthaIsRequired) {
         dispatch(getCaptchaUrl());
       }
       let errorMessage =
-        response.data.messages.length > 0
-          ? response.data.messages[0]
-          : "some error";
+        data.messages.length > 0 ? data.messages[0] : "some error";
       // @ts-ignore
       dispatch(stopSubmit("login", { _error: errorMessage }));
     }
   });
 };
 export const logout = () => (dispatch: dispatchType) => {
-  authAPI.logout().then((response) => {
-    if (response.data.resultCode === 0) {
+  authAPI.logout().then((data) => {
+    if (data.resultCode === ResultCodesEnum.Success) {
       dispatch(setAuthData(null, null, null, false));
     }
   });
