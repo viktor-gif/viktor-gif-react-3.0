@@ -1,6 +1,6 @@
 import axios from "axios";
 import { AxiosResponse } from "axios";
-import { profileInfoType, userType } from "../Types";
+import { photosType, profileInfoType, userType } from "../Types";
 
 let instance = axios.create({
   withCredentials: true, //запрашивает, правда ли ты этот пользователь
@@ -100,26 +100,50 @@ export const usersAPI = {
   },
 };
 
+type updateStatusAndProfileInfoResType = {
+  resultCode: ResultCodesEnum;
+  messages: Array<string>;
+  data: Object;
+};
+type setProfilePhotoResType = {
+  data: { photos: photosType };
+
+  resultCode: ResultCodesEnum;
+  messages: Array<string>;
+};
+
 export const profileAPI = {
   setProfile(userId: number) {
-    return instance.get(`profile/${userId}`);
+    return instance
+      .get<profileInfoType>(`profile/${userId}`)
+      .then((res) => res.data);
   },
   getStatus(userId: number) {
-    return instance.get(`profile/status/${userId}`);
+    return instance
+      .get<string>(`profile/status/${userId}`)
+      .then((res) => res.data);
   },
   updateStatus(status: string) {
-    return instance.put(`profile/status`, { status: status });
+    return instance
+      .put<updateStatusAndProfileInfoResType>(`profile/status`, {
+        status: status,
+      })
+      .then((res) => res.data);
   },
   setProfilePhoto(photoFile: any) {
     const formData = new FormData();
     formData.append("image", photoFile);
-    return instance.put(`profile/photo`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    return instance
+      .put<setProfilePhotoResType>(`profile/photo`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => res.data);
   },
   updateProfileInfo(info: profileInfoType) {
-    return instance.put(`profile`, info);
+    return instance
+      .put<updateStatusAndProfileInfoResType>(`profile`, info)
+      .then((res) => res.data);
   },
 };

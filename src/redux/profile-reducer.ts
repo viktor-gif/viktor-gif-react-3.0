@@ -1,7 +1,7 @@
 import { Dispatch } from "redux";
 import { stopSubmit } from "redux-form";
 import { ThunkAction } from "redux-thunk";
-import { profileAPI } from "../api/api";
+import { profileAPI, ResultCodesEnum } from "../api/api";
 import { profileInfoType } from "../Types";
 import { appStateType } from "./redux-store";
 
@@ -124,21 +124,21 @@ type thunkType = ThunkAction<void, appStateType, unknown, actionsTypes>;
 
 //redux-thunk
 export const getProfile = (userId: number) => (dispatch: dispatchType) => {
-  profileAPI.setProfile(userId).then((response) => {
-    dispatch(setProfile(response.data));
+  profileAPI.setProfile(userId).then((data) => {
+    dispatch(setProfile(data));
   });
 };
 export const getStatus = (userId: number): thunkType => (dispatch) => {
-  profileAPI.getStatus(userId).then((response) => {
-    dispatch(setStatus(response.data));
+  profileAPI.getStatus(userId).then((data) => {
+    dispatch(setStatus(data));
   });
 };
 export const updateStatus = (status: string) => async (
   dispatch: dispatchType
 ) => {
   try {
-    let response = await profileAPI.updateStatus(status);
-    if (response.data.resultCode === 0) {
+    let data = await profileAPI.updateStatus(status);
+    if (data.resultCode === ResultCodesEnum.Success) {
       dispatch(setStatus(status));
     }
   } catch (error) {
@@ -146,9 +146,9 @@ export const updateStatus = (status: string) => async (
   }
 };
 export const setProfilePhoto = (file: any): thunkType => (dispatch) => {
-  profileAPI.setProfilePhoto(file).then((response) => {
-    if (response.data.resultCode === 0) {
-      dispatch(savePhotoSuccess(response.data.data.photos));
+  profileAPI.setProfilePhoto(file).then((data) => {
+    if (data.resultCode === ResultCodesEnum.Success) {
+      dispatch(savePhotoSuccess(data.data.photos));
     }
   });
 };
@@ -158,18 +158,16 @@ export const updateProfileInfo = (info: profileInfoType) => async (
   getState: () => appStateType
 ) => {
   const userId = getState().auth.userId;
-  let response = await profileAPI.updateProfileInfo(info);
-  if (response.data.resultCode === 0) {
+  let data = await profileAPI.updateProfileInfo(info);
+  if (data.resultCode === ResultCodesEnum.Success) {
     // @ts-ignore
     dispatch(getProfile(userId));
   } else {
     let errorMessage =
-      response.data.messages.length > 0
-        ? response.data.messages[0]
-        : "some error";
+      data.messages.length > 0 ? data.messages[0] : "some error";
     // @ts-ignore
     dispatch(stopSubmit("profile-info", { _error: errorMessage }));
-    return Promise.reject(response.data.messages[0]);
+    return Promise.reject(data.messages[0]);
   }
 };
 
