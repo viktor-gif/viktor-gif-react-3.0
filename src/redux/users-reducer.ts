@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
-import { usersAPI } from "../api/api";
+import { ResultCodesEnum, usersAPI } from "../api/api";
 import { photosType } from "../Types";
 import { userType } from "../Types";
 import { appStateType } from "./redux-store";
@@ -158,16 +158,16 @@ export const requestUsers = (selectedPage = 1, pageSize = 10) => (
   getState: getStateType
 ) => {
   dispatch(setToggleFetching(true));
-  usersAPI.getUsers(selectedPage, pageSize).then((response) => {
+  usersAPI.getUsers(selectedPage, pageSize).then((data) => {
     dispatch(setToggleFetching(false));
-    dispatch(setUsers(response.data.items));
-    dispatch(setTotalUsersCount(response.data.totalCount));
+    dispatch(setUsers(data.items));
+    dispatch(setTotalUsersCount(data.totalCount));
   });
 };
 export const follow = (userId: number): thunkType => (dispatch, getState) => {
   dispatch(toggleFollowingProgress([userId]));
-  usersAPI.follow(userId).then((response) => {
-    if (response.data.resultCode === 0) {
+  usersAPI.follow(userId).then((data) => {
+    if (data.resultCode === ResultCodesEnum.Success) {
       dispatch(setFollow(userId));
     }
     dispatch(toggleFollowingProgress([false]));
@@ -175,8 +175,8 @@ export const follow = (userId: number): thunkType => (dispatch, getState) => {
 };
 export const unfollow = (userId: number): thunkType => (dispatch) => {
   dispatch(toggleFollowingProgress([userId]));
-  usersAPI.unfollow(userId).then((response) => {
-    if (response.data.resultCode === 0) {
+  usersAPI.unfollow(userId).then((data) => {
+    if (data.resultCode === ResultCodesEnum.Success) {
       dispatch(setUnfollow(userId));
     }
     dispatch(toggleFollowingProgress([false]));

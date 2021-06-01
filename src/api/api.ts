@@ -1,6 +1,6 @@
 import axios from "axios";
 import { AxiosResponse } from "axios";
-import { profileInfoType } from "../Types";
+import { profileInfoType, userType } from "../Types";
 
 let instance = axios.create({
   withCredentials: true, //запрашивает, правда ли ты этот пользователь
@@ -28,19 +28,19 @@ export const securityAPI = {
   },
 };
 
-type getAuthDataRespType = {
+type getAuthDataResType = {
   data: { id: number; email: string; login: string };
   resultCode: number;
   messages: Array<string>;
 };
 
-type loginRespType = {
+type loginResType = {
   resultCode: ResultCodesEnum;
   messages: Array<string>;
   data: { userId: number };
 };
 
-type logoutRespType = {
+type logoutResType = {
   resultCode: ResultCodesEnum;
   messages: Array<string>;
   data: object;
@@ -48,7 +48,7 @@ type logoutRespType = {
 
 export const authAPI = {
   getAuthData() {
-    return instance.get<getAuthDataRespType>("auth/me").then((res) => res.data);
+    return instance.get<getAuthDataResType>("auth/me").then((res) => res.data);
   },
   login(
     email: string | null,
@@ -57,7 +57,7 @@ export const authAPI = {
     captcha: string | null = null
   ) {
     return instance
-      .post<loginRespType>(`auth/login`, {
+      .post<loginResType>(`auth/login`, {
         email,
         password,
         rememberMe,
@@ -66,24 +66,37 @@ export const authAPI = {
       .then((res) => res.data);
   },
   logout() {
-    return instance
-      .delete<logoutRespType>("auth/login")
-      .then((res) => res.data);
+    return instance.delete<logoutResType>("auth/login").then((res) => res.data);
   },
 };
 
 // authAPI.getAuthData().then((res: AxiosResponse<any>) => res.data);
-
+type getUsersResType = {
+  items: Array<userType>;
+  totalCount: number;
+  error: string | null;
+};
+type followUnfollowResType = {
+  resultCode: ResultCodesEnum;
+  messages: Array<string>;
+  data: Object;
+};
 export const usersAPI = {
   getUsers(currentPage = 1, pageSize = 10) {
-    return instance.get(`users?page=${currentPage}&count=${pageSize}`);
+    return instance
+      .get<getUsersResType>(`users?page=${currentPage}&count=${pageSize}`)
+      .then((res) => res.data);
   },
 
   follow(userId: number) {
-    return instance.post(`follow/${userId}`);
+    return instance
+      .post<followUnfollowResType>(`follow/${userId}`)
+      .then((res) => res.data);
   },
   unfollow(userId: number) {
-    return instance.delete(`follow/${userId}`);
+    return instance
+      .delete<followUnfollowResType>(`follow/${userId}`)
+      .then((res) => res.data);
   },
 };
 
