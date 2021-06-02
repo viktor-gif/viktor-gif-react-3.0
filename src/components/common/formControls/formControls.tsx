@@ -1,7 +1,22 @@
 import React from "react";
 import s from "./formControls.module.css";
 
-const Component = (Component) => ({ input, meta, ...props }) => {
+type ComponentParamsType = {
+  input: {};
+  meta: {
+    touched: boolean;
+    error: string;
+  };
+  props: { placeholde: string };
+};
+type ComponentType = (params: ComponentParamsType) => React.ReactNode;
+
+const Component = (
+  Component: string | typeof React.Component
+): ComponentType => ({ input, meta, ...props }) => {
+  console.log(input);
+  console.log(meta);
+  console.log(props);
   let error = meta.touched && meta.error;
   return (
     <div className={s.form}>
