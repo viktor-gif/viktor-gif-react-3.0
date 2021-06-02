@@ -1,5 +1,5 @@
 import React from "react";
-import { Field, reduxForm } from "redux-form";
+import { Field, InjectedFormProps, reduxForm } from "redux-form";
 import {
   // maxLengthCreator,
   // minLengthCreator,
@@ -12,7 +12,14 @@ import { Redirect } from "react-router-dom";
 // let minLength5 = minLengthCreator(5);
 // let maxLength12 = maxLengthCreator(12);
 
-const LoginForm = (props) => {
+type loginFormOwnPropsType = {
+  captchaUrl: string | null;
+};
+
+const LoginForm: React.FC<
+  InjectedFormProps<loginFormValuesType, loginFormOwnPropsType> &
+    loginFormOwnPropsType
+> = (props) => {
   console.log(props.error);
   return (
     <form onSubmit={props.handleSubmit}>
@@ -59,12 +66,30 @@ const LoginForm = (props) => {
   );
 };
 
-const LoginReduxForm = reduxForm({
+const LoginReduxForm = reduxForm<loginFormValuesType, loginFormOwnPropsType>({
   form: "login",
 })(LoginForm);
 
-const Login = (props) => {
-  let submit = (values) => {
+type loginFormValuesType = {
+  email: string;
+  password: string;
+  rememberMe: boolean;
+  captcha: string;
+};
+
+type loginPropsType = {
+  isAuth: boolean;
+  captchaUrl: string | null;
+  login: (
+    email: string | null,
+    password: string | null,
+    rememberMe: boolean,
+    captcha: any
+  ) => void;
+};
+
+const Login: React.FC<loginPropsType> = (props) => {
+  let submit = (values: any) => {
     props.login(
       values.email,
       values.password,
