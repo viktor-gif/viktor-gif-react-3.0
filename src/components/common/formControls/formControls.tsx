@@ -14,9 +14,6 @@ type ComponentType = (params: ComponentParamsType) => React.ReactNode;
 const Component = (
   Component: string | typeof React.Component
 ): ComponentType => ({ input, meta, ...props }) => {
-  console.log(input);
-  console.log(meta);
-  console.log(props);
   let error = meta.touched && meta.error;
   return (
     <div className={s.form}>

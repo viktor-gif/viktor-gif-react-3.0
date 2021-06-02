@@ -20,7 +20,6 @@ const LoginForm: React.FC<
   InjectedFormProps<loginFormValuesType, loginFormOwnPropsType> &
     loginFormOwnPropsType
 > = (props) => {
-  console.log(props.error);
   return (
     <form onSubmit={props.handleSubmit}>
       <div>
@@ -97,7 +96,6 @@ const Login: React.FC<loginPropsType> = (props) => {
       values.captcha
     );
   };
-  console.log(props.captchaUrl);
   if (props.isAuth) {
     return <Redirect to="/profile" />;
   }
