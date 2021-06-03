@@ -1,16 +1,9 @@
 import React from "react";
 import { Field, InjectedFormProps, reduxForm } from "redux-form";
-import {
-  // maxLengthCreator,
-  // minLengthCreator,
-  required,
-} from "../../validators/validators";
+import { required } from "../../validators/validators";
 import { Input } from "../common/formControls/formControls";
 import s from "./login.module.css";
 import { Redirect } from "react-router-dom";
-
-// let minLength5 = minLengthCreator(5);
-// let maxLength12 = maxLengthCreator(12);
 
 type loginFormOwnPropsType = {
   captchaUrl: string | null;
@@ -88,7 +81,7 @@ type loginPropsType = {
 };
 
 const Login: React.FC<loginPropsType> = (props) => {
-  let submit = (values: any) => {
+  let submit = (values: loginFormValuesType) => {
     props.login(
       values.email,
       values.password,

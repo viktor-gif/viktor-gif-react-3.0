@@ -5,11 +5,11 @@ import withAuthRedirect from "../common/withAuthRedirect/withAuthRedirect";
 import { compose } from "redux";
 import { appStateType } from "../../redux/redux-store";
 
-type dialogType = {
+export type dialogType = {
   id: number;
   name: string;
 };
-type messageType = {
+export type messageType = {
   id: number;
   message: string;
 };
