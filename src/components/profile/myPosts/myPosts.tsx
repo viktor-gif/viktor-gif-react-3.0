@@ -1,12 +1,20 @@
 import React from "react";
-import { Field, reduxForm } from "redux-form";
+import { Field, InjectedFormProps, reduxForm } from "redux-form";
 import { maxLengthCreator, required } from "../../../validators/validators";
 import { Textarea } from "../../common/formControls/formControls";
 import s from "./myPosts.module.css";
+import { postType } from "./myPostsContainer";
 import Post from "./post/post";
 
-const MyPosts = (props) => {
-  const postsElements = [...props.profilePage.posts]
+type myPostsPropsType = {
+  posts: Array<postType>;
+
+  addPost: (newPost: string) => void;
+  deletePost: (id: number) => void;
+};
+
+const MyPosts: React.FC<myPostsPropsType> = (props) => {
+  const postsElements = [...props.posts]
     .reverse()
     .map((p) => (
       <Post
@@ -18,7 +26,7 @@ const MyPosts = (props) => {
       />
     ));
 
-  const submit = (values) => {
+  const submit = (values: postFormValuesType) => {
     props.addPost(values.postText);
   };
 
@@ -32,8 +40,14 @@ const MyPosts = (props) => {
     </div>
   );
 };
+
 const maxLength10 = maxLengthCreator(10);
-const PostForm = (props) => {
+
+type postFormValuesType = {
+  postText: string;
+};
+
+const PostForm: React.FC<InjectedFormProps<postFormValuesType>> = (props) => {
   const { handleSubmit } = props;
   return (
     <form onSubmit={handleSubmit}>
@@ -52,7 +66,7 @@ const PostForm = (props) => {
   );
 };
 
-const PostReduxForm = reduxForm({
+const PostReduxForm = reduxForm<postFormValuesType>({
   form: "postForm",
 })(PostForm);
 

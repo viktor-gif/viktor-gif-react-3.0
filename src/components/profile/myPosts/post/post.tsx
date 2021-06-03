@@ -1,7 +1,14 @@
 import React from "react";
 import s from "./post.module.css";
 
-const Post = React.memo((props) => {
+type propsType = {
+  id: number;
+  post: string;
+  likesCount: number;
+  deletePost: (id: number) => void;
+};
+
+const Post: React.FC<propsType> = React.memo((props) => {
   console.log("render");
 
   return (

@@ -14,10 +14,6 @@ type dialogsPropsType = {
   addMessage: (messageText: string) => void;
 };
 
-type dialogsFormValuesType = {
-  messageField: string;
-};
-
 const Dialogs: React.FC<dialogsPropsType> = (props) => {
   const dialogsElements = props.dialogs.map((d) => (
     <Dialog key={d.id} id={d.id} name={d.name} />
@@ -49,6 +45,10 @@ const Dialogs: React.FC<dialogsPropsType> = (props) => {
 };
 
 let maxLength20 = maxLengthCreator(20);
+
+type dialogsFormValuesType = {
+  messageField: string;
+};
 
 const DialogsForm: React.FC<InjectedFormProps<dialogsFormValuesType>> = (
   props
