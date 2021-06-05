@@ -5,19 +5,19 @@ import s from "./profileInfo.module.css";
 import avatar from "../../../img/ava.png";
 import ProfileInfoForm from "./profileInfoForm";
 import cn from "classnames";
-// import { profileInfoType } from "../../../Types";
+import { profileInfoType } from "../../../Types";
 
-// type profileInfoPropsType = {
-//   profileInfo: profileInfoType;
-//   isOwner: boolean;
-//   status: string;
+type profileInfoPropsType = {
+  profileInfo: profileInfoType;
+  isOwner: boolean;
+  status: string;
 
-//   setProfilePhoto: (photoFile: object) => void;
-//   updateProfileInfo: () => void;
-//   updateStatus: () => void;
-// };
+  setProfilePhoto: (photoFile: object) => void;
+  updateProfileInfo: (value: profileInfoType) => void;
+  updateStatus: () => void;
+};
 
-const ProfileInfo = (props) => {
+const ProfileInfo: React.FC<profileInfoPropsType> = (props) => {
   const [editMode, setEditMode] = useState(false);
 
   if (!props.profileInfo) {
@@ -25,7 +25,7 @@ const ProfileInfo = (props) => {
   }
   const info = props.profileInfo;
 
-  const onPhotoChange = (e) => {
+  const onPhotoChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length) {
       props.setProfilePhoto(e.target.files[0]);
     }
@@ -34,11 +34,12 @@ const ProfileInfo = (props) => {
   const edit = () => {
     setEditMode(true);
   };
-{/* @ts-ignore */}
-  const submit = (value) => {
-    {/* @ts-ignore */}
-    let promise = props.updateProfileInfo(value);
-    {/* @ts-ignore */}
+
+  const submit = (value: profileInfoType) => {
+    console.log(value);
+    // @ts-ignore
+    let promise: Promise = props.updateProfileInfo(value);
+    // @s-ignore
     promise.then(() => {
       setEditMode(false);
     });
@@ -58,10 +59,8 @@ const ProfileInfo = (props) => {
       <ProfileStatus status={props.status} updateStatus={props.updateStatus} />
 
       {editMode ? (
-        <ProfileInfoForm 
-          initialValues={info} 
-          info={info} 
-          onSubmit={submit} />
+        // @ts-ignore
+        <ProfileInfoForm initialValues={info} info={info} onSubmit={submit} />
       ) : (
         <Info info={info} edit={edit} isOwner={props.isOwner} />
       )}
@@ -69,13 +68,13 @@ const ProfileInfo = (props) => {
   );
 };
 
-// type infoPropsType = {
-//   info: profileInfoType;
-//   isOwner: boolean;
-//   edit: () => void;
-// };
+type infoPropsType = {
+  info: profileInfoType;
+  isOwner: boolean;
+  edit: () => void;
+};
 
-const Info = ({ info, edit, isOwner }) => {
+const Info: React.FC<infoPropsType> = ({ info, edit, isOwner }) => {
   let contacts = Object.keys(info.contacts).map((key) => {
     return (
       <div className={s.contactsItems} key={key}>

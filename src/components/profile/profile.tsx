@@ -6,6 +6,7 @@ import ProfileInfoContainer from "./profileInfo/profileInfoContainer";
 const Profile = () => {
   return (
     <div className={s.profile}>
+      {/* @ts-ignore */}
       <ProfileInfoContainer />
       {/* @ts-ignore */}
       <MyPostsContainer />

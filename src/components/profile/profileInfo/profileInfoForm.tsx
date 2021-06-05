@@ -1,9 +1,15 @@
 import React from "react";
 import s from "./profileInfo.module.css";
-import { Field, reduxForm } from "redux-form";
+import { Field, InjectedFormProps, reduxForm } from "redux-form";
 import { Input, Textarea } from "../../common/formControls/formControls";
+import { profileInfoType } from "../../../Types";
 
-const ProfileInfoForm = ({ info, handleSubmit, error }) => {
+const ProfileInfoForm: React.FC<InjectedFormProps<profileInfoType>> = ({
+  //@ts-ignore
+  info,
+  handleSubmit,
+  error,
+}) => {
   let contacts = Object.keys(info.contacts).map((key) => {
     return (
       <div className={s.contactsItems} key={key}>
@@ -39,7 +45,7 @@ const ProfileInfoForm = ({ info, handleSubmit, error }) => {
   );
 };
 
-const ProfileInfoReduxForm = reduxForm({
+const ProfileInfoReduxForm = reduxForm<profileInfoType>({
   form: "profile-info",
 })(ProfileInfoForm);
 
