@@ -8,7 +8,7 @@ import cn from "classnames";
 import { profileInfoType } from "../../../Types";
 
 type profileInfoPropsType = {
-  profileInfo: profileInfoType;
+  profileInfo: profileInfoType | null;
   isOwner: boolean;
   status: string;
 

@@ -15,10 +15,9 @@ import { profileInfoType } from "../../../Types";
 import { appStateType } from "../../../redux/redux-store";
 
 type mapStatePropsType = {
-  profileInfo: profileInfoType;
+  profileInfo: profileInfoType | null;
   status: string;
-  authUserId: number;
-  match: any;
+  authserId: number | null;
 };
 type maDispatchPropsType = {
   getProfile: (userId: number) => void;
@@ -27,12 +26,16 @@ type maDispatchPropsType = {
   updateProfileInfo: (profileInfo: profileInfoType) => void;
   setProfilePhoto: (photoFile: object) => void;
 };
-type propsType = mapStatePropsType & maDispatchPropsType;
+type ownPropsType = {
+  match: any;
+};
+type propsType = mapStatePropsType & maDispatchPropsType & ownPropsType;
 
 class ProfileInfoContainer extends React.Component<propsType> {
   requestInfoProfile() {
     let userId = this.props.match.params.userId;
     if (!userId) {
+      //@ts-ignore
       userId = this.props.authUserId;
     }
     this.props.getProfile(userId);
@@ -72,13 +75,17 @@ const mapStateToProps = (state: appStateType) => ({
 // const WithRouterProfileInfo = withRouter(ProfileInfoContainer);
 
 export default compose(
-  connect(mapStateToProps, {
-    getProfile,
-    getStatus,
-    updateStatus,
-    setProfilePhoto,
-    updateProfileInfo,
-  }),
+  connect<mapStatePropsType, maDispatchPropsType, propsType, appStateType>(
+    //@ts-ignore
+    mapStateToProps,
+    {
+      getProfile,
+      getStatus,
+      updateStatus,
+      setProfilePhoto,
+      updateProfileInfo,
+    }
+  ),
   withRouter
   // withAuthRedirect
 )(ProfileInfoContainer);
