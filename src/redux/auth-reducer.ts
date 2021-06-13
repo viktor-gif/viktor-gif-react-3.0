@@ -1,7 +1,9 @@
 import { Dispatch } from "redux";
 import { stopSubmit } from "redux-form";
 import { ThunkAction } from "redux-thunk";
-import { authAPI, ResultCodesEnum, securityAPI } from "../api/api";
+import { ResultCodesEnum } from "../api/api";
+import { authAPI } from "../api/auth-api";
+import { securityAPI } from "../api/security-api";
 import { appStateType } from "./redux-store";
 
 const SET_AUTH_DATA = "vgif/auth/SET_AUTH_DATA";

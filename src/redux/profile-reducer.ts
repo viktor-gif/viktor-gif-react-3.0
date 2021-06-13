@@ -1,7 +1,8 @@
 import { Dispatch } from "redux";
 import { stopSubmit } from "redux-form";
 import { ThunkAction } from "redux-thunk";
-import { profileAPI, ResultCodesEnum } from "../api/api";
+import { ResultCodesEnum } from "../api/api";
+import { profileAPI } from "../api/profile-api";
 import { profileInfoType } from "../Types";
 import { appStateType } from "./redux-store";
 

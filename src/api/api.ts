@@ -2,7 +2,7 @@ import axios from "axios";
 import { AxiosResponse } from "axios";
 import { photosType, profileInfoType, userType } from "../Types";
 
-let instance = axios.create({
+export const instance = axios.create({
   withCredentials: true, //запрашивает, правда ли ты этот пользователь
   baseURL: `https://social-network.samuraijs.com/api/1.0/`,
   headers: {

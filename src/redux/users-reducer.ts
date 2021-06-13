@@ -1,6 +1,7 @@
 import { Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
-import { ResultCodesEnum, usersAPI } from "../api/api";
+import { ResultCodesEnum } from "../api/api";
+import { usersAPI } from "../api/users-api";
 import { photosType } from "../Types";
 import { userType } from "../Types";
 import { appStateType, inferActionsTypes } from "./redux-store";
