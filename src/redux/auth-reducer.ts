@@ -84,6 +84,7 @@ export const getAuthData = () => async (dispatch: dispatchType) => {
   // return authAPI.getAuthData().then((response) => {
   let authData = await authAPI.getAuthData();
   if (authData.resultCode === ResultCodesEnum.Success) {
+    // @ts-ignore
     let { id, login, email } = authData.data;
     dispatch(setAuthData(id, login, email, true));
   }
