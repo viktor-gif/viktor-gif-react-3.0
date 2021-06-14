@@ -1,14 +1,8 @@
-import { instance, ResultCodesEnum } from "./api";
+import { instance, responseType, ResultCodesEnum } from "./api";
 import { photosType, profileInfoType } from "../Types";
 
-type updateStatusAndProfileInfoResType = {
-  resultCode: ResultCodesEnum;
-  messages: Array<string>;
-  data: Object;
-};
 type setProfilePhotoResType = {
   data: { photos: photosType };
-
   resultCode: ResultCodesEnum;
   messages: Array<string>;
 };
@@ -26,7 +20,7 @@ export const profileAPI = {
   },
   updateStatus(status: string) {
     return instance
-      .put<updateStatusAndProfileInfoResType>(`profile/status`, {
+      .put<responseType>(`profile/status`, {
         status: status,
       })
       .then((res) => res.data);
@@ -43,8 +37,6 @@ export const profileAPI = {
       .then((res) => res.data);
   },
   updateProfileInfo(info: profileInfoType) {
-    return instance
-      .put<updateStatusAndProfileInfoResType>(`profile`, info)
-      .then((res) => res.data);
+    return instance.put<responseType>(`profile`, info).then((res) => res.data);
   },
 };
