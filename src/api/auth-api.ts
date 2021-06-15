@@ -2,6 +2,8 @@ import { instance, responseType, ResultCodesEnum } from "./api";
 
 type getAuthDataResType = {
   data: { id: number; email: string; login: string };
+  messages: Array<string>;
+  resultCode: ResultCodesEnum;
 };
 
 type loginResType = {
@@ -10,9 +12,7 @@ type loginResType = {
 
 export const authAPI = {
   getAuthData() {
-    return instance
-      .get<responseType<getAuthDataResType>>("auth/me")
-      .then((res) => res.data);
+    return instance.get<getAuthDataResType>("auth/me").then((res) => res.data);
   },
   login(
     email: string | null,

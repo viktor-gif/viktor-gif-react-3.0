@@ -54,7 +54,6 @@ export const getAuthData = () => async (dispatch: dispatchType) => {
   // return authAPI.getAuthData().then((response) => {
   let authData = await authAPI.getAuthData();
   if (authData.resultCode === ResultCodesEnum.Success) {
-    // @ts-ignore
     let { id, login, email } = authData.data;
     dispatch(actions.setAuthData(id, login, email, true));
   }
@@ -75,7 +74,7 @@ export const login = (
       }
       let errorMessage =
         data.messages.length > 0 ? data.messages[0] : "some error";
-      // @ts-ignore
+
       dispatch(stopSubmit("login", { _error: errorMessage }));
     }
   });
@@ -99,4 +98,9 @@ type initialStateType = typeof initialState;
 type actionsTypes = inferActionsTypes<typeof actions>;
 
 type dispatchType = Dispatch<actionsTypes>;
-type thunkType = ThunkAction<void, appStateType, unknown, actionsTypes>;
+type thunkType = ThunkAction<
+  void,
+  appStateType,
+  unknown,
+  actionsTypes | ReturnType<typeof stopSubmit>
+>;
