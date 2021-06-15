@@ -4,7 +4,7 @@ import { ThunkAction } from "redux-thunk";
 import { ResultCodesEnum } from "../api/api";
 import { profileAPI } from "../api/profile-api";
 import { profileInfoType } from "../Types";
-import { appStateType } from "./redux-store";
+import { appStateType, inferActionsTypes } from "./redux-store";
 
 const ADD_POST = "vgif/profile/ADD_POST";
 const DELETE_POST = "vgif/profile/DELETE_POST";
@@ -69,55 +69,45 @@ const profileReducer = (
   }
 };
 
-type actionsTypes =
-  | addPostType
-  | deletePostType
-  | setProfileType
-  | setStatusType
-  | loadProfilePhotoType
-  | savePhotoSuccessType;
+type actionsTypes = inferActionsTypes<typeof actions>;
 
-type addPostType = { type: typeof ADD_POST; postText: string };
-export const addPost = (postText: any): addPostType => ({
-  type: ADD_POST,
-  postText,
-});
+export const actions = {
+  addPost: (postText: string) =>
+    ({
+      type: ADD_POST,
+      postText,
+    } as const),
 
-type deletePostType = { type: typeof DELETE_POST; id: number };
-export const deletePost = (id: number): deletePostType => ({
-  type: DELETE_POST,
-  id,
-});
+  deletePost: (id: number) =>
+    ({
+      type: DELETE_POST,
+      id,
+    } as const),
 
-type setProfileType = {
-  type: typeof SET_PROFILE;
-  profileInfo: profileInfoType;
+  setProfile: (profileInfo: profileInfoType) =>
+    ({
+      type: SET_PROFILE,
+      profileInfo,
+    } as const),
+
+  setStatus: (status: string) =>
+    ({
+      type: SET_STATUS,
+      status,
+    } as const),
+
+  loadProfilePhoto: (file: any) =>
+    ({
+      type: LOAD_PROFILE_PHOTO,
+      file,
+    } as const),
+
+  savePhotoSuccess: (photoFile: any) =>
+    ({
+      type: SAVE_PHOTO_SUCCESS,
+      photoFile,
+    } as const),
 };
-export const setProfile = (profileInfo: profileInfoType): setProfileType => ({
-  type: SET_PROFILE,
-  profileInfo,
-});
-
-type setStatusType = { type: typeof SET_STATUS; status: string };
-export const setStatus = (status: string): setStatusType => ({
-  type: SET_STATUS,
-  status,
-});
-
-type loadProfilePhotoType = { type: typeof LOAD_PROFILE_PHOTO; file: any };
-export const loadProfilePhoto = (file: any): loadProfilePhotoType => ({
-  type: LOAD_PROFILE_PHOTO,
-  file,
-});
-
-type savePhotoSuccessType = {
-  type: typeof SAVE_PHOTO_SUCCESS;
-  photoFile: any;
-};
-export const savePhotoSuccess = (photoFile: any): savePhotoSuccessType => ({
-  type: SAVE_PHOTO_SUCCESS,
-  photoFile,
-});
 
 type dispatchType = Dispatch<actionsTypes>;
 
@@ -126,12 +116,12 @@ type thunkType = ThunkAction<void, appStateType, unknown, actionsTypes>;
 //redux-thunk
 export const getProfile = (userId: number) => (dispatch: dispatchType) => {
   profileAPI.setProfile(userId).then((data) => {
-    dispatch(setProfile(data));
+    dispatch(actions.setProfile(data));
   });
 };
 export const getStatus = (userId: number): thunkType => (dispatch) => {
   profileAPI.getStatus(userId).then((data) => {
-    dispatch(setStatus(data));
+    dispatch(actions.setStatus(data));
   });
 };
 export const updateStatus = (status: string) => async (
@@ -140,7 +130,7 @@ export const updateStatus = (status: string) => async (
   try {
     let data = await profileAPI.updateStatus(status);
     if (data.resultCode === ResultCodesEnum.Success) {
-      dispatch(setStatus(status));
+      dispatch(actions.setStatus(status));
     }
   } catch (error) {
     console.log(error);
@@ -149,7 +139,7 @@ export const updateStatus = (status: string) => async (
 export const setProfilePhoto = (file: any): thunkType => (dispatch) => {
   profileAPI.setProfilePhoto(file).then((data) => {
     if (data.resultCode === ResultCodesEnum.Success) {
-      dispatch(savePhotoSuccess(data.data.photos));
+      dispatch(actions.savePhotoSuccess(data.data.photos));
     }
   });
 };
@@ -170,6 +160,12 @@ export const updateProfileInfo = (info: profileInfoType) => async (
     dispatch(stopSubmit("profile-info", { _error: errorMessage }));
     return Promise.reject(data.messages[0]);
   }
+};
+export const addPost = (postText: string): thunkType => (dispatch) => {
+  dispatch(actions.addPost(postText));
+};
+export const deletePost = (id: number): thunkType => (dispatch) => {
+  dispatch(actions.deletePost(id));
 };
 
 export default profileReducer;
