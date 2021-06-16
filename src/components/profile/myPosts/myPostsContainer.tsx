@@ -37,7 +37,7 @@ const mapStateToProps = (state: appStateType): mapStatePropsType => {
 //     },
 //   };
 // };
-export default compose(
+export default compose<React.ComponentType>(
   connect<mapStatePropsType, mapDispatchPropsType, propsType, appStateType>(
     mapStateToProps,
     { addPost, deletePost }

@@ -17,7 +17,7 @@ import { appStateType } from "../../../redux/redux-store";
 type mapStatePropsType = {
   profileInfo: profileInfoType | null;
   status: string;
-  authserId: number | null;
+  authUserId: number;
 };
 type maDispatchPropsType = {
   getProfile: (userId: number) => void;
@@ -35,7 +35,7 @@ class ProfileInfoContainer extends React.Component<propsType> {
   requestInfoProfile() {
     let userId = this.props.match.params.userId;
     if (!userId) {
-      //@ts-ignore
+      //@ts-ignor
       userId = this.props.authUserId;
     }
     this.props.getProfile(userId);
@@ -88,4 +88,4 @@ export default compose(
   ),
   withRouter
   // withAuthRedirect
-)(ProfileInfoContainer);
+)(ProfileInfoContainer) as React.ComponentType;
