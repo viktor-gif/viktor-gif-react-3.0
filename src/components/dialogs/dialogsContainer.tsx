@@ -4,6 +4,7 @@ import Dialogs from "./dialogs";
 import withAuthRedirect from "../common/withAuthRedirect/withAuthRedirect";
 import { compose } from "redux";
 import { appStateType } from "../../redux/redux-store";
+import React from "react";
 
 export type dialogType = {
   id: number;
@@ -40,7 +41,7 @@ const mapStateToProps = (state: appStateType): mapStatePropsType => {
 //   };
 // };
 
-export default compose(
+export default compose<React.ComponentType>(
   connect<mapStatePropsType, mapDispatchPropsType, propsType, appStateType>(
     mapStateToProps,
     { addMessage }

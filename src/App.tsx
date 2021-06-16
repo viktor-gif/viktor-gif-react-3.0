@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 import { Provider } from "react-redux";
-import store from "./redux/redux-store";
+import store, { appStateType } from "./redux/redux-store";
 import HeaderContainer from "./components/header/HeaderContainer";
 import Navbar from "./components/navbar/navbar";
 import Footer from "./components/footer/footer";
@@ -11,13 +11,21 @@ import LoginContainer from "./components/login/loginContainer";
 import { getAuthData } from "./redux/auth-reducer";
 import { initialize } from "./redux/app-reducer";
 import { connect } from "react-redux";
-const DialogsContainer = React.lazy(() =>
-  import("./components/dialogs/dialogsContainer")
+import { compose } from "redux";
+import { withRouter } from "react-router-dom";
+const DialogsContainer = React.lazy(
+  () => import("./components/dialogs/dialogsContainer")
 );
 const Profile = React.lazy(() => import("./components/profile/profile"));
 
-class App extends React.Component {
-  catchAllUnhandledErrors = (promiseRejectionEvent) => {
+type mapPropsType = ReturnType<typeof mapStateToProps>;
+type dispatchPropsType = {
+  initialize: () => void;
+  getAuthData: () => void;
+};
+
+class App extends React.Component<mapPropsType & dispatchPropsType> {
+  catchAllUnhandledErrors = (promiseRejectionEvent: PromiseRejectionEvent) => {
     alert(promiseRejectionEvent.reason);
   };
   componentDidMount() {
@@ -79,13 +87,15 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: appStateType) => ({
   initialized: state.app.initialized,
 });
 
-const AppContainer = connect(mapStateToProps, { getAuthData, initialize })(App);
+const AppContainer = compose<React.ComponentType>(
+  connect(mapStateToProps, { getAuthData, initialize })
+)(App);
 
-const ViktorGifApp = (props) => {
+const ViktorGifApp: React.FC = () => {
   return (
     <Provider store={store}>
       <React.StrictMode>
