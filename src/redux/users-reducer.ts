@@ -22,7 +22,7 @@ let initialState = {
   isFetching: false,
   followingInProgress: [],
 };
-type initialStateType = typeof initialState;
+export type initialStateType = typeof initialState;
 
 const usersReducer = (
   state = initialState,
