@@ -5,16 +5,16 @@ import s from "./profileInfo.module.css";
 import avatar from "../../../img/ava.png";
 import ProfileInfoForm from "./profileInfoForm";
 import cn from "classnames";
-import { profileInfoType } from "../../../Types";
+import { profileInfoType, contactsType } from "../../../Types";
 
 type profileInfoPropsType = {
   profileInfo: profileInfoType | null;
   isOwner: boolean;
   status: string;
 
-  setProfilePhoto: (photoFile: object) => void;
+  setProfilePhoto: (photoFile: File) => void;
   updateProfileInfo: (value: profileInfoType) => void;
-  updateStatus: () => void;
+  updateStatus: (status: string) => void;
 };
 
 const ProfileInfo: React.FC<profileInfoPropsType> = (props) => {
@@ -37,9 +37,10 @@ const ProfileInfo: React.FC<profileInfoPropsType> = (props) => {
 
   const submit = (value: profileInfoType) => {
     console.log(value);
+    //todo: remove Promise!!!
     // @ts-ignore
     let promise: Promise = props.updateProfileInfo(value);
-    // @s-ignore
+
     promise.then(() => {
       setEditMode(false);
     });
@@ -59,6 +60,7 @@ const ProfileInfo: React.FC<profileInfoPropsType> = (props) => {
       <ProfileStatus status={props.status} updateStatus={props.updateStatus} />
 
       {editMode ? (
+        //todo: remove Promise!!!
         // @ts-ignore
         <ProfileInfoForm initialValues={info} info={info} onSubmit={submit} />
       ) : (
@@ -78,8 +80,7 @@ const Info: React.FC<infoPropsType> = ({ info, edit, isOwner }) => {
   let contacts = Object.keys(info.contacts).map((key) => {
     return (
       <div className={s.contactsItems} key={key}>
-        {/* @ts-ignore */}
-        <span>{key}</span>: {info.contacts[key]}
+        <span>{key}</span>: {info.contacts[key as keyof contactsType]}
       </div>
     );
   });
