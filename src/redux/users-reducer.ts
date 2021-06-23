@@ -16,7 +16,7 @@ import { appStateType, inferActionsTypes } from "./redux-store";
 
 let initialState = {
   users: [] as Array<userType>,
-  pageSize: 10,
+  pageSize: 100,
   totalUsersCount: 0,
   selectedPage: 1,
   isFetching: false,
@@ -142,14 +142,14 @@ export const requestUsers = (selectedPage = 1, pageSize = 10) => (
     dispatch(actions.setTotalUsersCount(data.totalCount));
   });
 };
-export const follow = (userId: number): thunkType => (dispatch, getState) => {
+export const follow = (userId: number): thunkType => async (dispatch) => {
   dispatch(actions.toggleFollowingProgress([userId]));
-  usersAPI.follow(userId).then((data) => {
-    if (data.resultCode === ResultCodesEnum.Success) {
-      dispatch(actions.setFollow(userId));
-    }
-    dispatch(actions.toggleFollowingProgress([false]));
-  });
+
+  let data = await usersAPI.follow(userId);
+  if (data.resultCode === ResultCodesEnum.Success) {
+    dispatch(actions.setFollow(userId));
+  }
+  dispatch(actions.toggleFollowingProgress([false]));
 };
 export const unfollow = (userId: number): thunkType => (dispatch) => {
   dispatch(actions.toggleFollowingProgress([userId]));
