@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import s from "./paginator.module.css";
+import { Formik, Form, Field } from "formik";
 
 type props = {
   totalUsersCount: number;
@@ -23,6 +24,8 @@ const Paginator: React.FC<props> = (props) => {
 
   return (
     <div className={s.pages}>
+      <UsersSearchForm />
+
       {currentPortion > 1 && (
         <button onClick={() => setCurrentPortion(currentPortion - 1)}>
           prev
@@ -50,6 +53,46 @@ const Paginator: React.FC<props> = (props) => {
       )}
     </div>
   );
+};
+
+const usersSearchFormValidate = (values: usersSearchFormObjType) => {
+  const errors = {};
+  return errors;
+};
+
+const UsersSearchForm = () => {
+  const submit = (
+    values: usersSearchFormObjType,
+    { setSubmitting }: { setSubmitting: (isSubmiting: boolean) => void }
+  ) => {
+    setTimeout(() => {
+      alert(JSON.stringify(values, null, 2));
+
+      setSubmitting(false);
+    }, 400);
+  };
+
+  return (
+    <Formik
+      initialValues={{ term: "" }}
+      validate={usersSearchFormValidate}
+      onSubmit={submit}
+    >
+      {({ isSubmitting }) => (
+        <Form>
+          <Field type="text" name="term" />
+
+          <button type="submit" disabled={isSubmitting}>
+            Find
+          </button>
+        </Form>
+      )}
+    </Formik>
+  );
+};
+
+type usersSearchFormObjType = {
+  term: String;
 };
 
 export default Paginator;
