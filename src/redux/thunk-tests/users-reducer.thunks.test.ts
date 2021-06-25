@@ -8,7 +8,7 @@ type APIResponseType = {
   data: object;
 };
 
-jest.mock("../api/users-api");
+jest.mock("../../api/users-api");
 const userAPIMock = usersAPI as jest.Mocked<typeof usersAPI>;
 
 const dispatchMock = jest.fn();

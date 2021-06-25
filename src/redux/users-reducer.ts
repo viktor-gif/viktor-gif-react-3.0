@@ -1,10 +1,9 @@
 import { Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
-import { ResultCodesEnum } from "../api/api";
+import { ResultCodesEnum, responseType } from "../api/api";
 import { usersAPI } from "../api/users-api";
-import { photosType } from "../Types";
 import { userType } from "../Types";
-import { appStateType, inferActionsTypes } from "./redux-store";
+import { appStateType, inferActionsTypes, baseThunkType } from "./redux-store";
 
 // const SET_USERS = "vgif/users/SET_USERS";
 // const FOLLOW = "vgif/users/FOLLOW";
@@ -20,9 +19,8 @@ let initialState = {
   totalUsersCount: 0,
   selectedPage: 1,
   isFetching: false,
-  followingInProgress: [],
+  followingInProgress: [] as Array<number>,
 };
-export type initialStateType = typeof initialState;
 
 const usersReducer = (
   state = initialState,
@@ -80,8 +78,6 @@ const usersReducer = (
   }
 };
 
-type actionsTypes = inferActionsTypes<typeof actions>;
-
 export const actions = {
   setUsers: (users: any) =>
     ({
@@ -126,10 +122,6 @@ export const actions = {
     } as const),
 };
 
-type getStateType = () => appStateType;
-type dispatchType = Dispatch<actionsTypes>;
-type thunkType = ThunkAction<void, appStateType, unknown, actionsTypes>;
-
 //redux-thunks
 export const requestUsers = (selectedPage = 1, pageSize = 10) => (
   dispatch: dispatchType,
@@ -142,24 +134,61 @@ export const requestUsers = (selectedPage = 1, pageSize = 10) => (
     dispatch(actions.setTotalUsersCount(data.totalCount));
   });
 };
-export const follow = (userId: number): thunkType => async (dispatch) => {
-  dispatch(actions.toggleFollowingProgress([userId]));
 
-  let data = await usersAPI.follow(userId);
-  if (data.resultCode === ResultCodesEnum.Success) {
-    dispatch(actions.setFollow(userId));
+const _followUnfollowFlow = async (
+  dispatch: Dispatch<actionsTypes>,
+  userId: number,
+  apiMethod: (userId: number) => Promise<responseType>,
+  actionCreator: (userId: number) => actionsTypes
+) => {
+  dispatch(actions.toggleFollowingProgress([userId]));
+  let response = await apiMethod(userId);
+
+  if (response.resultCode == 0) {
+    dispatch(actionCreator(userId));
   }
   dispatch(actions.toggleFollowingProgress([false]));
 };
-export const unfollow = (userId: number): thunkType => (dispatch) => {
-  dispatch(actions.toggleFollowingProgress([userId]));
-  usersAPI.unfollow(userId).then((data) => {
-    if (data.resultCode === ResultCodesEnum.Success) {
-      dispatch(actions.setUnfollow(userId));
-    }
-    dispatch(actions.toggleFollowingProgress([false]));
-  });
+export const follow = (userId: number): thunkType => {
+  return async (dispatch) => {
+    await _followUnfollowFlow(
+      dispatch,
+      userId,
+      usersAPI.follow.bind(usersAPI),
+      actions.setFollow
+    );
+  };
 };
+
+export const unfollow = (userId: number): thunkType => {
+  return async (dispatch) => {
+    await _followUnfollowFlow(
+      dispatch,
+      userId,
+      usersAPI.unfollow.bind(usersAPI),
+      actions.setUnfollow
+    );
+  };
+};
+
+// export const follow = (userId: number): thunkType => async (dispatch) => {
+//   dispatch(actions.toggleFollowingProgress([userId]));
+
+//   let data = await usersAPI.follow(userId);
+//   if (data.resultCode === ResultCodesEnum.Success) {
+//     dispatch(actions.setFollow(userId));
+//   }
+//   dispatch(actions.toggleFollowingProgress([false]));
+// };
+// export const unfollow = (userId: number): thunkType => (dispatch) => {
+//   dispatch(actions.toggleFollowingProgress([userId]));
+//   usersAPI.unfollow(userId).then((data) => {
+//     if (data.resultCode === ResultCodesEnum.Success) {
+//       dispatch(actions.setUnfollow(userId));
+//     }
+//     dispatch(actions.toggleFollowingProgress([false]));
+//   });
+// };
 export const setCurrentPage = (currentPage: number): thunkType => (
   dispatch
 ) => {
@@ -167,3 +196,10 @@ export const setCurrentPage = (currentPage: number): thunkType => (
 };
 
 export default usersReducer;
+
+export type initialStateType = typeof initialState;
+type actionsTypes = inferActionsTypes<typeof actions>;
+type getStateType = () => appStateType;
+type dispatchType = Dispatch<actionsTypes>;
+type thunkType = ThunkAction<void, appStateType, unknown, actionsTypes>;
+// type thunkType = baseThunkType<actionsTypes>
