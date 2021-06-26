@@ -22,6 +22,7 @@ let initialState = {
   followingInProgress: [] as Array<number>,
   filter: {
     term: "",
+    friend: null as null | boolean,
   },
 };
 
@@ -111,10 +112,10 @@ export const actions = {
       currentPage,
     } as const),
 
-  setFilter: (term: string) =>
+  setFilter: (filter: filterType) =>
     ({
       type: "SET_FILTER",
-      payload: { term },
+      payload: filter,
     } as const),
 
   setTotalUsersCount: (usersCount: number) =>
@@ -137,17 +138,20 @@ export const actions = {
 };
 
 //redux-thunks
-export const requestUsers = (selectedPage = 1, pageSize = 10, term: string) => (
-  dispatch: dispatchType,
-  getState: getStateType
-) => {
+export const requestUsers = (
+  selectedPage = 1,
+  pageSize = 10,
+  filter: filterType
+) => (dispatch: dispatchType, getState: getStateType) => {
   dispatch(actions.setToggleFetching(true));
-  dispatch(actions.setFilter(term));
-  usersAPI.getUsers(selectedPage, pageSize, term).then((data) => {
-    dispatch(actions.setToggleFetching(false));
-    dispatch(actions.setUsers(data.items));
-    dispatch(actions.setTotalUsersCount(data.totalCount));
-  });
+  dispatch(actions.setFilter(filter));
+  usersAPI
+    .getUsers(selectedPage, pageSize, filter.term, filter.friend)
+    .then((data) => {
+      dispatch(actions.setToggleFetching(false));
+      dispatch(actions.setUsers(data.items));
+      dispatch(actions.setTotalUsersCount(data.totalCount));
+    });
 };
 
 const _followUnfollowFlow = async (

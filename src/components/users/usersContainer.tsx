@@ -16,6 +16,7 @@ import {
   getSelectedPage,
   getTotalUsersCount,
   getUsers,
+  getUsersFilter,
 } from "../../redux/selectors/user-selectors";
 import { userType } from "../../Types";
 import { appStateType } from "../../redux/redux-store";
@@ -28,9 +29,14 @@ type mapStatePropsType = {
   totalUsersCount: number;
   users: Array<userType>;
   followingInProgress: Array<number>;
+  filter: filterType;
 };
 type mapDispatchPropsType = {
-  requestUsers: (currentPage: number, pageSize: number, term: string) => void;
+  requestUsers: (
+    currentPage: number,
+    pageSize: number,
+    filter: filterType
+  ) => void;
   setCurrentPage: (currentPage: number) => void;
   follow: (userId: number) => void;
   unfollow: (userId: number) => void;
@@ -41,12 +47,20 @@ type propsType = mapStatePropsType & mapDispatchPropsType & ownPropsType;
 
 class UsersContainer extends React.Component<propsType> {
   componentDidMount() {
-    this.props.requestUsers(this.props.selectedPage, this.props.pageSize, "");
+    this.props.requestUsers(
+      this.props.selectedPage,
+      this.props.pageSize,
+      this.props.filter
+    );
   }
 
   setCurrentPage = (currentPage: number) => {
     this.props.setCurrentPage(currentPage);
-    this.props.requestUsers(currentPage, this.props.pageSize, "");
+    this.props.requestUsers(
+      currentPage,
+      this.props.pageSize,
+      this.props.filter
+    );
   };
 
   follow = (userId: number) => {
@@ -57,11 +71,7 @@ class UsersContainer extends React.Component<propsType> {
   };
 
   onFilterChanged = (filter: filterType) => {
-    this.props.requestUsers(
-      this.props.selectedPage,
-      this.props.pageSize,
-      filter.term
-    );
+    this.props.requestUsers(1, this.props.pageSize, filter);
   };
 
   render() {
@@ -92,6 +102,7 @@ const mapStateToProps = (state: appStateType): mapStatePropsType => {
     selectedPage: getSelectedPage(state),
     isFetching: getIsFetching(state),
     followingInProgress: getFollowingInProgress(state),
+    filter: getUsersFilter(state),
   };
 };
 

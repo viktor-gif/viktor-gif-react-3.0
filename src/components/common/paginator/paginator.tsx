@@ -11,7 +11,7 @@ type paginatorPropsType = {
   onFilterChanged: (filter: filterType) => void;
 };
 
-const Paginator: React.FC<paginatorPropsType> = (props) => {
+const Paginator: React.FC<paginatorPropsType> = React.memo((props) => {
   const pagesCount = Math.ceil(props.totalUsersCount / props.pageSize);
   let pagesArr: Array<number> = [];
   for (let i = 1; i <= pagesCount; i++) {
@@ -55,31 +55,54 @@ const Paginator: React.FC<paginatorPropsType> = (props) => {
       )}
     </div>
   );
-};
+});
 
 const usersSearchFormValidate = (values: any) => {
   const errors = {};
   return errors;
 };
 
-const UsersSearchForm: React.FC<usersSearchFormType> = (props) => {
+type formType = {
+  term: string;
+  friend: "true" | "false" | "null";
+};
+
+const UsersSearchForm: React.FC<usersSearchFormType> = React.memo((props) => {
   const submit = (
-    values: filterType,
+    values: formType,
     { setSubmitting }: { setSubmitting: (isSubmiting: boolean) => void }
   ) => {
-    props.onFilterChanged(values);
+    const filter: filterType = {
+      term: values.term,
+      friend:
+        values.friend === "null"
+          ? null
+          : values.friend === "false"
+          ? false
+          : true,
+    };
+
+    props.onFilterChanged(filter);
     setSubmitting(false);
   };
 
   return (
     <Formik
-      initialValues={{ term: "" }}
+      initialValues={{ term: "", friend: "null" }}
       validate={usersSearchFormValidate}
       onSubmit={submit}
     >
       {({ isSubmitting }) => (
         <Form>
           <Field type="text" name="term" />
+
+          <Field as="select" name="friend">
+            <option value="null">All</option>
+
+            <option value="true">Only followed</option>
+
+            <option value="false">Only unfollowed</option>
+          </Field>
 
           <button type="submit" disabled={isSubmitting}>
             Find
@@ -88,7 +111,7 @@ const UsersSearchForm: React.FC<usersSearchFormType> = (props) => {
       )}
     </Formik>
   );
-};
+});
 
 type usersSearchFormType = {
   // term: String;
