@@ -1,25 +1,58 @@
-import React from "react";
+import React, { useEffect } from "react";
 import s from "./users.module.css";
 import userAvatar from "../../img/ava.png";
 import { NavLink } from "react-router-dom";
 import Paginator from "../common/paginator/paginator";
-import { userType } from "../../Types";
-import { filterType } from "../../redux/users-reducer";
+import {
+  filterType,
+  requestUsers,
+  setCurrentPage,
+  follow,
+  unfollow,
+} from "../../redux/users-reducer";
+import {
+  getFollowingInProgress,
+  getPageSize,
+  getSelectedPage,
+  getTotalUsersCount,
+  getUsers,
+  getUsersFilter,
+} from "../../redux/selectors/user-selectors";
+import { useDispatch, useSelector } from "react-redux";
 
-type propsType = {
-  users: Array<userType>;
-  follow: (userId: number) => void;
-  unfollow: (userId: number) => void;
-  followingInProgress: Array<number>;
-  totalUsersCount: number;
-  pageSize: number;
-  selectedPage: number;
-  setCurrentPage: (pageNumber: number) => void;
-  onFilterChanged: (filter: filterType) => void;
-};
+type propsType = {};
 
-const Users: React.FC<propsType> = (props) => {
-  const usersItems = props.users.map((u) => {
+export const Users: React.FC<propsType> = (props) => {
+  const users = useSelector(getUsers);
+  const followingInProgress = useSelector(getFollowingInProgress);
+  const totalUsersCount = useSelector(getTotalUsersCount);
+  const pageSize = useSelector(getPageSize);
+  const selectedPage = useSelector(getSelectedPage);
+  const filter = useSelector(getUsersFilter);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(requestUsers(selectedPage, pageSize, filter));
+  }, []);
+
+  const onPageChanged = (currentPage: number) => {
+    dispatch(setCurrentPage(currentPage));
+    dispatch(requestUsers(currentPage, pageSize, filter));
+  };
+
+  const onFilterChanged = (filter: filterType) => {
+    dispatch(requestUsers(1, pageSize, filter));
+  };
+
+  const wrapFollow = (userId: number) => {
+    dispatch(follow(userId));
+  };
+  const wrapUnfollow = (userId: number) => {
+    dispatch(unfollow(userId));
+  };
+
+  const usersItems = users.map((u) => {
     return (
       <div key={u.id} className={s.user}>
         <div className={s.userPhoto}>
@@ -30,15 +63,15 @@ const Users: React.FC<propsType> = (props) => {
         <div>
           {u.followed ? (
             <button
-              disabled={props.followingInProgress.some((id) => id === u.id)}
-              onClick={() => props.unfollow(u.id)}
+              disabled={followingInProgress.some((id) => id === u.id)}
+              onClick={() => wrapUnfollow(u.id)}
             >
               Unfollow
             </button>
           ) : (
             <button
-              disabled={props.followingInProgress.some((id) => id === u.id)}
-              onClick={() => props.follow(u.id)}
+              disabled={followingInProgress.some((id) => id === u.id)}
+              onClick={() => wrapFollow(u.id)}
             >
               Follow
             </button>
@@ -59,11 +92,11 @@ const Users: React.FC<propsType> = (props) => {
   return (
     <div>
       <Paginator
-        totalUsersCount={props.totalUsersCount}
-        pageSize={props.pageSize}
-        selectedPage={props.selectedPage}
-        setCurrentPage={props.setCurrentPage}
-        onFilterChanged={props.onFilterChanged}
+        totalUsersCount={totalUsersCount}
+        pageSize={pageSize}
+        selectedPage={selectedPage}
+        setCurrentPage={onPageChanged}
+        onFilterChanged={onFilterChanged}
       />
       {usersItems}
     </div>
@@ -78,5 +111,3 @@ const Users: React.FC<propsType> = (props) => {
 //   const unfollow = () => {
 //     props.unfollow(props.id);
 //   };
-
-export default Users;

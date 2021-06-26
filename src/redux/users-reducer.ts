@@ -3,7 +3,7 @@ import { ThunkAction } from "redux-thunk";
 import { ResultCodesEnum, responseType } from "../api/api";
 import { usersAPI } from "../api/users-api";
 import { userType } from "../Types";
-import { appStateType, inferActionsTypes, baseThunkType } from "./redux-store";
+import { appStateType, inferActionsTypes } from "./redux-store";
 
 // const SET_USERS = "vgif/users/SET_USERS";
 // const FOLLOW = "vgif/users/FOLLOW";
@@ -163,7 +163,7 @@ const _followUnfollowFlow = async (
   dispatch(actions.toggleFollowingProgress([userId]));
   let response = await apiMethod(userId);
 
-  if (response.resultCode == 0) {
+  if (response.resultCode === ResultCodesEnum.Success) {
     dispatch(actionCreator(userId));
   }
   dispatch(actions.toggleFollowingProgress([false]));

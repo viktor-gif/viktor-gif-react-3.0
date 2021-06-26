@@ -6,13 +6,12 @@ import HeaderContainer from "./components/header/HeaderContainer";
 import Navbar from "./components/navbar/navbar";
 import Footer from "./components/footer/footer";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import UsersContainer from "./components/users/usersContainer";
+import UsersPage from "./components/users/usersContainer";
 import LoginContainer from "./components/login/loginContainer";
 import { getAuthData } from "./redux/auth-reducer";
 import { initialize } from "./redux/app-reducer";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { withRouter } from "react-router-dom";
 const DialogsContainer = React.lazy(
   () => import("./components/dialogs/dialogsContainer")
 );
@@ -72,7 +71,7 @@ class App extends React.Component<mapPropsType & dispatchPropsType> {
                   );
                 }}
               />
-              <Route path="/users" render={() => <UsersContainer />} />
+              <Route path="/users" render={() => <UsersPage />} />
               <Route path="/login/facebook" render={() => <h1>Facebook</h1>} />
               <Route path="/login" render={() => <LoginContainer />} />
               <Redirect from="/" to="/profile" />

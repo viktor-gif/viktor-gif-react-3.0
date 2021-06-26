@@ -1,6 +1,4 @@
 import axios from "axios";
-import { AxiosResponse } from "axios";
-import { photosType, profileInfoType, userType } from "../Types";
 
 export const instance = axios.create({
   withCredentials: true, //запрашивает, правда ли ты этот пользователь

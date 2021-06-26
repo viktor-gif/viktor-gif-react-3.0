@@ -1,6 +1,5 @@
-import { instance, responseType, ResultCodesEnum } from "./api";
+import { instance, responseType } from "./api";
 import { userType } from "../Types";
-import { AxiosPromise } from "axios";
 
 // authAPI.getAuthData().then((res: AxiosResponse<any>) => res.data);
 type getUsersResType = {
