@@ -35,7 +35,6 @@ class ProfileInfoContainer extends React.Component<propsType> {
   requestInfoProfile() {
     let userId = this.props.match.params.userId;
     if (!userId) {
-      //@ts-ignor
       userId = this.props.authUserId;
     }
     this.props.getProfile(userId);
