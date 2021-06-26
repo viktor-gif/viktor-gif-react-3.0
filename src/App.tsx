@@ -7,7 +7,7 @@ import Navbar from "./components/navbar/navbar";
 import Footer from "./components/footer/footer";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import UsersPage from "./components/users/usersContainer";
-import LoginContainer from "./components/login/loginContainer";
+import { LoginPage } from "./components/login/login";
 import { getAuthData } from "./redux/auth-reducer";
 import { initialize } from "./redux/app-reducer";
 import { connect } from "react-redux";
@@ -73,7 +73,7 @@ class App extends React.Component<mapPropsType & dispatchPropsType> {
               />
               <Route path="/users" render={() => <UsersPage />} />
               <Route path="/login/facebook" render={() => <h1>Facebook</h1>} />
-              <Route path="/login" render={() => <LoginContainer />} />
+              <Route path="/login" render={() => <LoginPage />} />
               <Redirect from="/" to="/profile" />
               <Route path="*" render={() => <div>404 NOT FOUND!</div>} />
             </Switch>

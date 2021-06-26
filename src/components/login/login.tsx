@@ -4,6 +4,9 @@ import { required } from "../../validators/validators";
 import { Input } from "../common/formControls/formControls";
 import s from "./login.module.css";
 import { Redirect } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { appStateType } from "../../redux/redux-store";
+import { login } from "../../redux/auth-reducer";
 
 type loginFormOwnPropsType = {
   captchaUrl: string | null;
@@ -69,35 +72,28 @@ type loginFormValuesType = {
   captcha: string;
 };
 
-type loginPropsType = {
-  isAuth: boolean;
-  captchaUrl: string | null;
-  login: (
-    email: string | null,
-    password: string | null,
-    rememberMe: boolean,
-    captcha: any
-  ) => void;
-};
+type loginPropsType = {};
 
-const Login: React.FC<loginPropsType> = (props) => {
+export const LoginPage: React.FC<loginPropsType> = (props) => {
+  const captchaUrl = useSelector(
+    (state: appStateType) => state.auth.captchaUrl
+  );
+  const isAuth = useSelector((state: appStateType) => state.auth.isAuth);
+
+  const dispatch = useDispatch();
+
   let submit = (values: loginFormValuesType) => {
-    props.login(
-      values.email,
-      values.password,
-      values.rememberMe,
-      values.captcha
+    dispatch(
+      login(values.email, values.password, values.rememberMe, values.captcha)
     );
   };
-  if (props.isAuth) {
+  if (isAuth) {
     return <Redirect to="/profile" />;
   }
   return (
     <div>
       <h1>Login-page</h1>
-      <LoginReduxForm captchaUrl={props.captchaUrl} onSubmit={submit} />
+      <LoginReduxForm captchaUrl={captchaUrl} onSubmit={submit} />
     </div>
   );
 };
-
-export default Login;
