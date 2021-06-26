@@ -4,6 +4,7 @@ import userAvatar from "../../img/ava.png";
 import { NavLink } from "react-router-dom";
 import Paginator from "../common/paginator/paginator";
 import { userType } from "../../Types";
+import { filterType } from "../../redux/users-reducer";
 
 type propsType = {
   users: Array<userType>;
@@ -14,6 +15,7 @@ type propsType = {
   pageSize: number;
   selectedPage: number;
   setCurrentPage: (pageNumber: number) => void;
+  onFilterChanged: (filter: filterType) => void;
 };
 
 const Users: React.FC<propsType> = (props) => {
@@ -61,6 +63,7 @@ const Users: React.FC<propsType> = (props) => {
         pageSize={props.pageSize}
         selectedPage={props.selectedPage}
         setCurrentPage={props.setCurrentPage}
+        onFilterChanged={props.onFilterChanged}
       />
       {usersItems}
     </div>

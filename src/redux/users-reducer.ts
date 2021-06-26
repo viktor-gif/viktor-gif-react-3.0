@@ -20,6 +20,9 @@ let initialState = {
   selectedPage: 1,
   isFetching: false,
   followingInProgress: [] as Array<number>,
+  filter: {
+    term: "",
+  },
 };
 
 const usersReducer = (
@@ -73,6 +76,11 @@ const usersReducer = (
         ...state,
         followingInProgress: action.progress,
       };
+    case "SET_FILTER":
+      return {
+        ...state,
+        filter: action.payload,
+      };
     default:
       return state;
   }
@@ -103,6 +111,12 @@ export const actions = {
       currentPage,
     } as const),
 
+  setFilter: (term: string) =>
+    ({
+      type: "SET_FILTER",
+      payload: { term },
+    } as const),
+
   setTotalUsersCount: (usersCount: number) =>
     ({
       type: "SET_TOTAL_USERS_COUNT",
@@ -123,12 +137,13 @@ export const actions = {
 };
 
 //redux-thunks
-export const requestUsers = (selectedPage = 1, pageSize = 10) => (
+export const requestUsers = (selectedPage = 1, pageSize = 10, term: string) => (
   dispatch: dispatchType,
   getState: getStateType
 ) => {
   dispatch(actions.setToggleFetching(true));
-  usersAPI.getUsers(selectedPage, pageSize).then((data) => {
+  dispatch(actions.setFilter(term));
+  usersAPI.getUsers(selectedPage, pageSize, term).then((data) => {
     dispatch(actions.setToggleFetching(false));
     dispatch(actions.setUsers(data.items));
     dispatch(actions.setTotalUsersCount(data.totalCount));
@@ -198,6 +213,7 @@ export const setCurrentPage = (currentPage: number): thunkType => (
 export default usersReducer;
 
 export type initialStateType = typeof initialState;
+export type filterType = typeof initialState.filter;
 type actionsTypes = inferActionsTypes<typeof actions>;
 type getStateType = () => appStateType;
 type dispatchType = Dispatch<actionsTypes>;

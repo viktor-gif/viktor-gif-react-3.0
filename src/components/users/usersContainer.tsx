@@ -5,6 +5,7 @@ import {
   follow,
   unfollow,
   setCurrentPage,
+  filterType,
 } from "../../redux/users-reducer";
 import Users from "./users";
 import Preloader from "../common/preloader/preloader";
@@ -29,7 +30,7 @@ type mapStatePropsType = {
   followingInProgress: Array<number>;
 };
 type mapDispatchPropsType = {
-  requestUsers: (currentPage: number, pageSize: number) => void;
+  requestUsers: (currentPage: number, pageSize: number, term: string) => void;
   setCurrentPage: (currentPage: number) => void;
   follow: (userId: number) => void;
   unfollow: (userId: number) => void;
@@ -40,12 +41,12 @@ type propsType = mapStatePropsType & mapDispatchPropsType & ownPropsType;
 
 class UsersContainer extends React.Component<propsType> {
   componentDidMount() {
-    this.props.requestUsers(this.props.selectedPage, this.props.pageSize);
+    this.props.requestUsers(this.props.selectedPage, this.props.pageSize, "");
   }
 
   setCurrentPage = (currentPage: number) => {
     this.props.setCurrentPage(currentPage);
-    this.props.requestUsers(currentPage, this.props.pageSize);
+    this.props.requestUsers(currentPage, this.props.pageSize, "");
   };
 
   follow = (userId: number) => {
@@ -53,6 +54,14 @@ class UsersContainer extends React.Component<propsType> {
   };
   unfollow = (userId: number) => {
     this.props.unfollow(userId);
+  };
+
+  onFilterChanged = (filter: filterType) => {
+    this.props.requestUsers(
+      this.props.selectedPage,
+      this.props.pageSize,
+      filter.term
+    );
   };
 
   render() {
@@ -68,6 +77,7 @@ class UsersContainer extends React.Component<propsType> {
           unfollow={this.unfollow}
           setCurrentPage={this.setCurrentPage}
           followingInProgress={this.props.followingInProgress}
+          onFilterChanged={this.onFilterChanged}
         />
       </>
     );

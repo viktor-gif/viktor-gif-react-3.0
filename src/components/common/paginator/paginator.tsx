@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import s from "./paginator.module.css";
 import { Formik, Form, Field } from "formik";
+import { filterType } from "../../../redux/users-reducer";
 
-type props = {
+type paginatorPropsType = {
   totalUsersCount: number;
   pageSize: number;
   selectedPage: number;
   setCurrentPage: (pageNumber: number) => void;
+  onFilterChanged: (filter: filterType) => void;
 };
 
-const Paginator: React.FC<props> = (props) => {
+const Paginator: React.FC<paginatorPropsType> = (props) => {
   const pagesCount = Math.ceil(props.totalUsersCount / props.pageSize);
   let pagesArr: Array<number> = [];
   for (let i = 1; i <= pagesCount; i++) {
@@ -24,7 +26,7 @@ const Paginator: React.FC<props> = (props) => {
 
   return (
     <div className={s.pages}>
-      <UsersSearchForm />
+      <UsersSearchForm onFilterChanged={props.onFilterChanged} />
 
       {currentPortion > 1 && (
         <button onClick={() => setCurrentPortion(currentPortion - 1)}>
@@ -55,21 +57,18 @@ const Paginator: React.FC<props> = (props) => {
   );
 };
 
-const usersSearchFormValidate = (values: usersSearchFormObjType) => {
+const usersSearchFormValidate = (values: any) => {
   const errors = {};
   return errors;
 };
 
-const UsersSearchForm = () => {
+const UsersSearchForm: React.FC<usersSearchFormType> = (props) => {
   const submit = (
-    values: usersSearchFormObjType,
+    values: filterType,
     { setSubmitting }: { setSubmitting: (isSubmiting: boolean) => void }
   ) => {
-    setTimeout(() => {
-      alert(JSON.stringify(values, null, 2));
-
-      setSubmitting(false);
-    }, 400);
+    props.onFilterChanged(values);
+    setSubmitting(false);
   };
 
   return (
@@ -91,8 +90,9 @@ const UsersSearchForm = () => {
   );
 };
 
-type usersSearchFormObjType = {
-  term: String;
+type usersSearchFormType = {
+  // term: String;
+  onFilterChanged: (filter: filterType) => void;
 };
 
 export default Paginator;
