@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import s from "./paginator.module.css";
 import { Formik, Form, Field } from "formik";
 import { filterType } from "../../../redux/users-reducer";
+import { useSelector } from "react-redux";
+import { getUsersFilter } from "../../../redux/selectors/user-selectors";
 
 type paginatorPropsType = {
   totalUsersCount: number;
@@ -62,12 +64,15 @@ const usersSearchFormValidate = (values: any) => {
   return errors;
 };
 
+type friendType = "true" | "false" | "null";
 type formType = {
   term: string;
-  friend: "true" | "false" | "null";
+  friend: friendType;
 };
 
 const UsersSearchForm: React.FC<usersSearchFormType> = React.memo((props) => {
+  const filter = useSelector(getUsersFilter);
+
   const submit = (
     values: formType,
     { setSubmitting }: { setSubmitting: (isSubmiting: boolean) => void }
@@ -88,7 +93,11 @@ const UsersSearchForm: React.FC<usersSearchFormType> = React.memo((props) => {
 
   return (
     <Formik
-      initialValues={{ term: "", friend: "null" }}
+      enableReinitialize={true}
+      initialValues={{
+        term: filter.term,
+        friend: String(filter.friend) as friendType,
+      }}
       validate={usersSearchFormValidate}
       onSubmit={submit}
     >
