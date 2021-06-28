@@ -25,7 +25,7 @@ const Paginator: React.FC<paginatorPropsType> = React.memo((props) => {
   let leftPageOfPortion: number =
     currentPortion * portionSize - (portionSize - 1);
   let rightPageOfPortion: number = currentPortion * portionSize;
-
+  console.log(props.selectedPage);
   return (
     <div className={s.pages}>
       <UsersSearchForm onFilterChanged={props.onFilterChanged} />
@@ -77,6 +77,7 @@ const UsersSearchForm: React.FC<usersSearchFormType> = React.memo((props) => {
     values: formType,
     { setSubmitting }: { setSubmitting: (isSubmiting: boolean) => void }
   ) => {
+    console.log(values);
     const filter: filterType = {
       term: values.term,
       friend:
@@ -89,6 +90,7 @@ const UsersSearchForm: React.FC<usersSearchFormType> = React.memo((props) => {
 
     props.onFilterChanged(filter);
     setSubmitting(false);
+    console.log(values);
   };
 
   return (

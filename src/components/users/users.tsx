@@ -37,9 +37,9 @@ export const Users: React.FC<propsType> = (props) => {
   const history = useHistory();
 
   type queryParamsType = {
-    term: string;
-    page: string;
-    friend: string;
+    term?: string;
+    page?: string;
+    friend?: string;
   };
 
   useEffect(() => {
@@ -69,7 +69,7 @@ export const Users: React.FC<propsType> = (props) => {
   }, []);
 
   useEffect(() => {
-    const query: any = {};
+    const query: queryParamsType = {};
     if (!!filter.term) query.term = filter.term;
     if (filter.friend !== null) query.friend = String(filter.friend);
     if (selectedPage !== 1) query.page = String(selectedPage);

@@ -139,7 +139,7 @@ export const actions = {
 
 //redux-thunks
 export const requestUsers = (
-  selectedPage = 1,
+  selectedPage: number,
   pageSize = 10,
   filter: filterType
 ) => (dispatch: dispatchType, getState: getStateType) => {
