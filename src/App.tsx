@@ -8,6 +8,7 @@ import Footer from "./components/footer/footer";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import UsersPage from "./components/users/usersContainer";
 import { LoginPage } from "./components/login/login";
+// import { ChatPage } from "./pages/chat/chatPage";
 import { getAuthData } from "./redux/auth-reducer";
 import { initialize } from "./redux/app-reducer";
 import { connect } from "react-redux";
@@ -29,6 +30,7 @@ const { Header, Sider, Content } = Layout;
 const DialogsContainer = React.lazy(
   () => import("./components/dialogs/dialogsContainer")
 );
+const ChatPage = React.lazy(() => import("./pages/chat/chatPage"));
 const Profile = React.lazy(() => import("./components/profile/profile"));
 
 type mapPropsType = ReturnType<typeof mapStateToProps>;
@@ -78,127 +80,136 @@ class App extends React.Component<mapPropsType & dispatchPropsType> {
     }
 
     return (
-      <Layout>
-        <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
-          <div className="logo" />
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
-            <Menu.Item key="1" icon={<UserOutlined />}>
-              nav 1
-            </Menu.Item>
-            <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-              nav 2
-            </Menu.Item>
-            <Menu.Item key="3" icon={<UploadOutlined />}>
-              nav 3
-            </Menu.Item>
-          </Menu>
-        </Sider>
-        <Layout className="site-layout">
-          <Header className="site-layout-background" style={{ padding: 0 }}>
-            {React.createElement(
-              this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
-              {
-                className: "trigger",
-                onClick: this.toggle,
-              }
-            )}
-          </Header>
-          <Content
-            className="site-layout-background"
-            style={{
-              margin: "24px 16px",
-              padding: 24,
-              minHeight: 280,
-            }}
-          >
-            <BrowserRouter>
-              <div className="App">
-                {/* <HeaderContainer />
-                <Navbar /> */}
-                <div className="content-wrapper">
-                  <Switch>
-                    <Route
-                      exact
-                      path="/"
-                      render={() => <Redirect to="/profile" />}
-                    />
-                    <Route
-                      path="/profile/:userId?"
-                      render={() => {
-                        return (
-                          <React.Suspense fallback={<div>Loading...</div>}>
-                            <Profile />
-                          </React.Suspense>
-                        );
-                      }}
-                    />
-                    <Route
-                      path="/dialogs"
-                      render={() => {
-                        return (
-                          <React.Suspense fallback={<div>Loading...</div>}>
-                            <DialogsContainer />
-                          </React.Suspense>
-                        );
-                      }}
-                    />
-                    <Route path="/users" render={() => <UsersPage />} />
-                    <Route
-                      path="/login/facebook"
-                      render={() => <h1>Facebook</h1>}
-                    />
-                    <Route path="/login" render={() => <LoginPage />} />
-                    <Redirect from="/" to="/profile" />
-                    <Route path="*" render={() => <div>404 NOT FOUND!</div>} />
-                  </Switch>
-                </div>
+      <BrowserRouter>
+        <div className="App">
+          <HeaderContainer />
+          <Navbar />
+          <div className="content-wrapper">
+            <Switch>
+              {/* <Route exact path="/" render={() => <Redirect to="/profile" />} /> */}
+              <Route
+                path="/profile/:userId?"
+                render={() => {
+                  return (
+                    <React.Suspense fallback={<div>Loading...</div>}>
+                      <Button type="primary">Ant Design</Button>
+                      <Profile />
+                    </React.Suspense>
+                  );
+                }}
+              />
+              <Route
+                path="/dialogs"
+                render={() => {
+                  return (
+                    <React.Suspense fallback={<div>Loading...</div>}>
+                      <DialogsContainer />
+                    </React.Suspense>
+                  );
+                }}
+              />
+              <Route path="/users" render={() => <UsersPage />} />
+              <Route path="/login/facebook" render={() => <h1>Facebook</h1>} />
+              <Route path="/login" render={() => <LoginPage />} />
+              <Route
+                path="/chat"
+                render={() => {
+                  return (
+                    <React.Suspense fallback={<div>Loading...</div>}>
+                      <ChatPage />
+                    </React.Suspense>
+                  );
+                }}
+              />
+              <Redirect from="/" to="/profile" />
+              <Route path="*" render={() => <div>404 NOT FOUND!</div>} />
+            </Switch>
+          </div>
 
-                {/* <Footer /> */}
-              </div>
-            </BrowserRouter>
-          </Content>
-        </Layout>
-      </Layout>
+          <Footer />
+        </div>
+      </BrowserRouter>
+      // <Layout>
+      //   <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
+      //     <div className="logo" />
+      //     <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
+      //       <Menu.Item key="1" icon={<UserOutlined />}>
+      //         nav 1
+      //       </Menu.Item>
+      //       <Menu.Item key="2" icon={<VideoCameraOutlined />}>
+      //         nav 2
+      //       </Menu.Item>
+      //       <Menu.Item key="3" icon={<UploadOutlined />}>
+      //         nav 3
+      //       </Menu.Item>
+      //     </Menu>
+      //   </Sider>
+      //   <Layout className="site-layout">
+      //     <Header className="site-layout-background" style={{ padding: 0 }}>
+      //       {React.createElement(
+      //         this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+      //         {
+      //           className: "trigger",
+      //           onClick: this.toggle,
+      //         }
+      //       )}
+      //     </Header>
+      //     <Content
+      //       className="site-layout-background"
+      //       style={{
+      //         margin: "24px 16px",
+      //         padding: 24,
+      //         minHeight: 280,
+      //       }}
+      //     >
+      //       <BrowserRouter>
+      //         <div className="App">
+      //           {/* <HeaderContainer />
+      //           <Navbar /> */}
+      //           <div className="content-wrapper">
+      //             <Switch>
+      //               <Route
+      //                 exact
+      //                 path="/"
+      //                 render={() => <Redirect to="/profile" />}
+      //               />
+      //               <Route
+      //                 path="/profile/:userId?"
+      //                 render={() => {
+      //                   return (
+      //                     <React.Suspense fallback={<div>Loading...</div>}>
+      //                       <Profile />
+      //                     </React.Suspense>
+      //                   );
+      //                 }}
+      //               />
+      //               <Route
+      //                 path="/dialogs"
+      //                 render={() => {
+      //                   return (
+      //                     <React.Suspense fallback={<div>Loading...</div>}>
+      //                       <DialogsContainer />
+      //                     </React.Suspense>
+      //                   );
+      //                 }}
+      //               />
+      //               <Route path="/users" render={() => <UsersPage />} />
+      //               <Route
+      //                 path="/login/facebook"
+      //                 render={() => <h1>Facebook</h1>}
+      //               />
+      //               <Route path="/login" render={() => <LoginPage />} />
+      //               <Redirect from="/" to="/profile" />
+      //               <Route path="*" render={() => <div>404 NOT FOUND!</div>} />
+      //             </Switch>
+      //           </div>
 
-      // <BrowserRouter>
-      //   <div className="App">
-      //     <HeaderContainer />
-      //     <Navbar />
-      //     <div className="content-wrapper">
-      //       <Switch>
-      //         {/* <Route exact path="/" render={() => <Redirect to="/profile" />} /> */}
-      //         <Route
-      //           path="/profile/:userId?"
-      //           render={() => {
-      //             return (
-      //               <React.Suspense fallback={<div>Loading...</div>}>
-      //                 <Button type="primary">Ant Design</Button>
-      //                 <Profile />
-      //               </React.Suspense>
-      //             );
-      //           }}
-      //         />
-      //         <Route
-      //           path="/dialogs"
-      //           render={() => {
-      //             return (
-      //               <React.Suspense fallback={<div>Loading...</div>}>
-      //                 <DialogsContainer />
-      //               </React.Suspense>
-      //             );
-      //           }}
-      //         />
-      //         <Route path="/users" render={() => <UsersPage />} />
-      //         <Route path="/login/facebook" render={() => <h1>Facebook</h1>} />
-      //         <Route path="/login" render={() => <LoginPage />} />
-      //         <Redirect from="/" to="/profile" />
-      //         <Route path="*" render={() => <div>404 NOT FOUND!</div>} />
-      //       </Switch>
-      //     </div>
-
-      //     <Footer />
-      //   </div>
-      // </BrowserRouter>
+      //           {/* <Footer /> */}
+      //         </div>
+      //       </BrowserRouter>
+      //     </Content>
+      //   </Layout>
+      // </Layout>
     );
   }
 }

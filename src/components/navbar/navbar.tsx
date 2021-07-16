@@ -23,6 +23,11 @@ const Navbar: React.FC<propsType> = (props) => {
         </NavLink>
       </div>
       <div className={s.item}>
+        <NavLink activeClassName={s.active} to="chat">
+          chat
+        </NavLink>
+      </div>
+      <div className={s.item}>
         <NavLink activeClassName={s.active} to="news">
           news
         </NavLink>
