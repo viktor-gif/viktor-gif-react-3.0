@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-const ws = new WebSocket(
+const wsChannel = new WebSocket(
   "wss://social-network.samuraijs.com/handlers/ChatHandler.ashx"
 );
 
@@ -18,50 +18,69 @@ const Chat: React.FC = () => {
 };
 
 const Messages: React.FC = () => {
-  const messages = [1, 2, 3, 4];
+  const [messages, setMessages] = useState<chatMessageType[]>([]);
+
+  useEffect(() => {
+    wsChannel.addEventListener("message", (e: MessageEvent) => {
+      let newMessages = JSON.parse(e.data);
+      setMessages((prevMessages) => [...prevMessages, ...newMessages]);
+    });
+  }, []);
+
   return (
     <div style={{ height: "200px", overflowY: "auto" }}>
-      {messages.map((m: any) => (
-        <Message />
-      ))}
-      {messages.map((m: any) => (
-        <Message />
-      ))}
-      {messages.map((m: any) => (
-        <Message />
+      {messages.map((m, index) => (
+        <Message key={index} message={m} />
       ))}
     </div>
   );
 };
 
-const Message: React.FC = () => {
-  const message = {
-    url: "https://via.placeholder.com/50",
-    author: "Viktor-gif",
-    text: "Hello friends!!!",
-  };
+const Message: React.FC<{ message: chatMessageType }> = ({ message }) => {
+  //@ts-ignore
+  // const message: chatMessageType = null;
   return (
     <div>
-      <img src={message.url} />
-      <b>{message.author}</b>
+      <img src={message.photo} style={{ width: "30px" }} />
+      <b>{message.userName}</b>
 
-      <div>{message.text}</div>
+      <div>{message.message}</div>
       <hr />
     </div>
   );
 };
 
 const AddMessageForm: React.FC = () => {
+  const [message, setMessage] = useState("");
+
+  const sendMessage = () => {
+    if (!message) {
+      return;
+    }
+    wsChannel.send(message);
+    setMessage("");
+  };
+
   return (
     <div>
       <div>
-        <textarea></textarea>
+        <textarea
+          onChange={(e) => setMessage(e.currentTarget.value)}
+          value={message}
+        ></textarea>
       </div>
       <div>
-        <button>Send</button>
+        <button onClick={sendMessage}>Send</button>
       </div>
     </div>
   );
 };
 
 export default ChatPage;
+
+export type chatMessageType = {
+  message: string;
+  photo: string;
+  userId: number;
+  userName: string;
+};
