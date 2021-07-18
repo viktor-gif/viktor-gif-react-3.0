@@ -52,6 +52,15 @@ const Message: React.FC<{ message: chatMessageType }> = ({ message }) => {
 
 const AddMessageForm: React.FC = () => {
   const [message, setMessage] = useState("");
+  const [readyStatus, setReadyStatus] = useState<"pending" | "ready">(
+    "pending"
+  );
+
+  useEffect(() => {
+    wsChannel.addEventListener("open", () => {
+      setReadyStatus("ready");
+    });
+  }, []);
 
   const sendMessage = () => {
     if (!message) {
@@ -70,7 +79,9 @@ const AddMessageForm: React.FC = () => {
         ></textarea>
       </div>
       <div>
-        <button onClick={sendMessage}>Send</button>
+        <button disabled={readyStatus !== "ready"} onClick={sendMessage}>
+          Send
+        </button>
       </div>
     </div>
   );
