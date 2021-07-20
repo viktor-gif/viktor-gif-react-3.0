@@ -12,8 +12,13 @@ const messageHandler = (e: MessageEvent) => {
   subscribers.forEach((s) => s(newMessages));
 };
 
-function createChannel() {
+const cleanup = () => {
   ws?.removeEventListener("close", closeHandler);
+  ws?.removeEventListener("message", messageHandler);
+};
+
+function createChannel() {
+  cleanup();
   ws?.close();
 
   ws = new WebSocket(
@@ -29,8 +34,7 @@ export const chatAPI = {
   },
   stop() {
     subscribers = [];
-    ws?.removeEventListener("close", closeHandler);
-    ws?.removeEventListener("message", messageHandler);
+    cleanup();
     ws?.close();
   },
   subscribe(callback: subscriberType) {

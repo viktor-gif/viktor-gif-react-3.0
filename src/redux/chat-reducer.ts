@@ -4,12 +4,11 @@ import { ThunkAction } from "redux-thunk";
 import { appStateType, inferActionsTypes } from "./redux-store";
 import { chatMessageType, chatAPI } from "../api/chat-api";
 
+type statusType = "pending" | "ready";
+
 let initialState = {
   messages: [] as chatMessageType[],
-  login: null as string | null,
-  email: null as string | null,
-  isAuth: false,
-  captchaUrl: null as string | null,
+  status: "pending" as statusType,
 };
 
 const chatReducer = (
@@ -22,6 +21,11 @@ const chatReducer = (
         ...state,
         messages: [...state.messages, ...action.payload.messages],
       };
+    case "vgif/chat/STATUS_CHANGED":
+      return {
+        ...state,
+        messages: [...state.messages, ...action.payload.status],
+      };
 
     default:
       return state;
@@ -33,6 +37,11 @@ export const actions = {
     ({
       type: "vgif/chat/MESSAGES_RECEIVED",
       payload: { messages },
+    } as const),
+  statusChanged: (status: statusType) =>
+    ({
+      type: "vgif/chat/STATUS_CHANGED",
+      payload: { status },
     } as const),
 };
 
