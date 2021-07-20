@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { chatMessageType } from "../../api/chat-api";
 
 const ChatPage: React.FC = () => {
   return (
@@ -128,10 +129,3 @@ const AddMessageForm: React.FC<{ wsChannel: WebSocket | null }> = ({
 };
 
 export default ChatPage;
-
-export type chatMessageType = {
-  message: string;
-  photo: string;
-  userId: number;
-  userName: string;
-};
