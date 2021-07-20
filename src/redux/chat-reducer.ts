@@ -47,10 +47,15 @@ const newMessagehandlerCreator = (dispatch: dispatchType) => {
 };
 //redux-thunks
 export const startMessagesListening = () => (dispatch: dispatchType) => {
+  chatAPI.start();
   chatAPI.subscribe(newMessagehandlerCreator(dispatch));
 };
 export const stopMessagesListening = () => (dispatch: dispatchType) => {
   chatAPI.unsubscribe(newMessagehandlerCreator(dispatch));
+  chatAPI.stop();
+};
+export const sendMessage = (message: string) => (dispatch: dispatchType) => {
+  chatAPI.sendMessage(message);
 };
 
 export default chatReducer;

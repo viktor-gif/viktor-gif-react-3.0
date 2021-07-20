@@ -6,6 +6,7 @@ import profileReducer from "./profile-reducer";
 import usersReducer from "./users-reducer";
 import { reducer as formReducer } from "redux-form";
 import appReducer from "./app-reducer";
+import chatReducer from "./chat-reducer";
 
 let rootReducer = combineReducers({
   profilePage: profileReducer,
@@ -14,6 +15,7 @@ let rootReducer = combineReducers({
   auth: authReducer,
   form: formReducer,
   app: appReducer,
+  chat: chatReducer,
 });
 
 type rootReducerType = typeof rootReducer;
