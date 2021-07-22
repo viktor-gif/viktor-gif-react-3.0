@@ -24,25 +24,23 @@ const Chat: React.FC = () => {
   useEffect(() => {
     dispatch(startMessagesListening());
     return () => {
-      stopMessagesListening();
+      dispatch(stopMessagesListening());
     };
   }, []);
 
   return (
     <div>
-      {status === "error" ? (
+      {status === "error" && (
         <div>Some error occured. Please refresh the page</div>
-      ) : (
-        <>
-          <Messages />
-          <AddMessageForm />
-        </>
       )}
+      <Messages />
+      <AddMessageForm />
     </div>
   );
 };
 
 const Messages: React.FC<{}> = () => {
+  console.log(">>>>>>Messages");
   const messages = useSelector((state: appStateType) => state.chat.messages);
 
   return (
