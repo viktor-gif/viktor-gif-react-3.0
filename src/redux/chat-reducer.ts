@@ -3,8 +3,7 @@ import { stopSubmit } from "redux-form";
 import { ThunkAction } from "redux-thunk";
 import { appStateType, inferActionsTypes } from "./redux-store";
 import { chatMessageType, chatAPI } from "../api/chat-api";
-
-type statusType = "pending" | "ready";
+import { statusType } from "../api/chat-api";
 
 let initialState = {
   messages: [] as chatMessageType[],
@@ -24,7 +23,7 @@ const chatReducer = (
     case "vgif/chat/STATUS_CHANGED":
       return {
         ...state,
-        messages: [...state.messages, ...action.payload.status],
+        status: action.payload.status,
       };
 
     default:
@@ -45,22 +44,35 @@ export const actions = {
     } as const),
 };
 
-let _newMessagehandler: ((messages: chatMessageType[]) => void) | null = null;
-const newMessagehandlerCreator = (dispatch: dispatchType) => {
-  if (_newMessagehandler === null) {
-    _newMessagehandler = (messages) => {
+let _newMessageHandler: ((messages: chatMessageType[]) => void) | null = null;
+const newMessageHandlerCreator = (dispatch: dispatchType) => {
+  if (_newMessageHandler === null) {
+    _newMessageHandler = (messages) => {
       dispatch(actions.messagesReceived(messages));
     };
   }
-  return _newMessagehandler;
+  return _newMessageHandler;
 };
+
+let _statusChangedHandler: ((status: statusType) => void) | null = null;
+const statusChangedHandlerCreator = (dispatch: dispatchType) => {
+  if (_statusChangedHandler === null) {
+    _statusChangedHandler = (status) => {
+      dispatch(actions.statusChanged(status));
+    };
+  }
+  return _statusChangedHandler;
+};
+
 //redux-thunks
 export const startMessagesListening = () => (dispatch: dispatchType) => {
   chatAPI.start();
-  chatAPI.subscribe(newMessagehandlerCreator(dispatch));
+  chatAPI.subscribe("messages-received", newMessageHandlerCreator(dispatch));
+  chatAPI.subscribe("status-changed", statusChangedHandlerCreator(dispatch));
 };
 export const stopMessagesListening = () => (dispatch: dispatchType) => {
-  chatAPI.unsubscribe(newMessagehandlerCreator(dispatch));
+  chatAPI.unsubscribe("messages-received", newMessageHandlerCreator(dispatch));
+  chatAPI.unsubscribe("status-changed", statusChangedHandlerCreator(dispatch));
   chatAPI.stop();
 };
 export const sendMessage = (message: string) => (dispatch: dispatchType) => {
